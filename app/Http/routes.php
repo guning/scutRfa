@@ -15,5 +15,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('competition/sign-up', 'Competition@register');
 
+Route::get('competition/sign-up', function() {
+    return view('index');
+});
+
 Route::get('competition/export', 'Competition@export');
 
