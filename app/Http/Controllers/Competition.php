@@ -79,7 +79,7 @@ class Competition extends Controller
                 foreach ($teams as $team) {
                     $sheet->mergeCells("B$start:B$end")->setValueOfCell($team->team_name, 'B', $start);
                     $sheet->mergeCells("A$start:A$end")->setValueOfCell($team_number, 'A', $start);
-                    foreach (range(0, 2) as $number) {
+                    foreach (range(0, count($team->competitionMember) - 1) as $number) {
                         $sheet->setValueOfCell($team->competitionMember[$number]->name, 'C', $start + $number);
                         $sheet->setValueOfCell($team->competitionMember[$number]->phone, 'D', $start + $number);
                         $sheet->setValueOfCell($team->competitionMember[$number]->qq, 'E', $start + $number);

@@ -280,10 +280,10 @@ function Submit(MemberAdd, CheckResult) {
             XHR.setRequestHeader('x-requested-with', 'XMLHttpRequest');
             XHR.onreadystatechange = function() {
                 if (XHR.readyState == 4) {
-                    if (XHR.state == 200) {
+                    if (XHR.status == 200) {
                         // 报名成功
                         CheckResult.message('报·名·成·功！');
-                    } else if (XHR.state == 422) {
+                    } else if (XHR.status == 422) {
                         //报名失败
                         CheckResult.message('报·名·失·败！');
                     }
