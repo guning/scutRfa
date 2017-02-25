@@ -74,12 +74,9 @@ function AddMember() {
                 {
                     break;
                 }
-
         }
         // console.log(_this.time);
     }
-
-
     return this;
 }
 
@@ -104,7 +101,7 @@ function SetClass() {
         } else if (this.hasClass(el, cN)) {
             el.className = el.className.replace(cN, '');
         } else {
-            return console.error('.' + cN + ' is not in ' + el);
+//            return console.error('.' + cN + ' is not in ' + el);
         }
 
         return this;
@@ -186,11 +183,11 @@ function CheckInfo(AddMember) {
         return true;
     };
     this.checkTeamName = function(num) {
-        return input[num].value.length < 20 && input[num].value.length > 0;
+        return input[num].value.length <= 20 && input[num].value.length > 0;
     }
     this.checkName = function(num) {
-        //中日韩英
-        var reg = /^[\u2E80-\u9FFF]{1,20}$/;
+        //中日韩
+        var reg = /^[\u4E00-\u9FA5]{1,20}$/;
         num = (num == 0) ? 0 : (num * 3 - 2);
         return reg.test(input[num].value);
     };
@@ -202,14 +199,17 @@ function CheckInfo(AddMember) {
         var reg = /^\d{5,12}$/;
         return reg.test(input[num * 3].value);
     };
-    this.message = function(word) {
-        var notice = {
+    this.message = function(word, time) {
+        return notice = {
             init: function() {
                 var _this = this;
                 this.create(word);
-                setTimeout(function() {
-                    _this.remove();
-                }, 3000);
+                if(time) {
+                		setTimeout(function() {
+                        _this.remove();
+                    }, time);
+                }
+                return this;
             },
             create: function() {
                 var textNode = document.createElement('div');
@@ -217,12 +217,13 @@ function CheckInfo(AddMember) {
                 textNode.appendChild(text);
                 textNode.setAttribute('class', 'message');
                 container[0].appendChild(textNode);
+                return this;
             },
             remove: function() {
                 container[0].removeChild(document.getElementsByClassName('message')[0]);
+                return this;
             }
         };
-        notice.init();
     };
     this.check = function() {
         console.log(this.sub);
@@ -270,22 +271,27 @@ function Submit(MemberAdd, CheckResult) {
             errorFlag = CheckResult.submitable();
             if (!errorFlag) {
                 // 这里表示出错了，请用户改一下信息
-                CheckResult.message('请检查填写是否有误！');
+                CheckResult.message('请检查填写是否有误！', 3000).init();
 
                 return false;
             }
+            
+            var handing = CheckResult.message('提交中...', 0).init();
+            
             _this.getTotalMessage();
             var XHR = new XMLHttpRequest();
             XHR.open('post', '../competition/sign-up', 'true');
             XHR.setRequestHeader('x-requested-with', 'XMLHttpRequest');
             XHR.onreadystatechange = function() {
                 if (XHR.readyState == 4) {
+                		//去掉提交中
+                		handing.remove();
                     if (XHR.status == 200) {
                         // 报名成功
-                        CheckResult.message('报·名·成·功！');
-                    } else if (XHR.status == 422) {
+                        CheckResult.message('报·名·成·功！', 3000).init();
+                    } else if (XHR.status == 422 || XHR.status == 500) {
                         //报名失败
-                        CheckResult.message('报·名·失·败！');
+                        CheckResult.message('报·名·失·败！', 3000).init();
                     }
                 }
             }
