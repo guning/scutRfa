@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Forilegium extends Model
 {
     //
-    protected $table ='report';
+    protected $table ='forilegium';
     
     protected $dateFormat = 'U';
     

@@ -12,4 +12,9 @@ class Report extends Model
     protected $dateFormat = 'U';
     
     protected $fillable = ['title', 'abstract'];
+    
+    public function comReport()
+    {
+        return $this->hasMany('App\ComReport', 'article_id', 'id');
+    }
 }

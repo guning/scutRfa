@@ -17,6 +17,11 @@ class Feedback extends Model
     
     public function user()
     {
-        $this->belongsTo('App\User', 'user_id', 'id');
+        return $this->belongsTo('App\User', 'user_id', 'id');
+    }
+    
+    public function feedbackResponse()
+    {
+        return $this->hasOne('App\FeedbackResponse', 'question_id', 'id');
     }
 }
