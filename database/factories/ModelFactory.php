@@ -1,31 +1,19 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Model Factories
-|--------------------------------------------------------------------------
-|
-| Here you may define all of your model factories. Model factories give
-| you a convenient way to create models for testing and seeding your
-| database. Just tell the factory how a default model should look.
-|
-*/
-
-$factory->define(App\User::class, function (Faker\Generator $faker) {
-    return [
-        'name' => $faker->name,
-        'email' => $faker->safeEmail,
-        'password' => bcrypt(str_random(10)),
-        'remember_token' => str_random(10),
-    ];
-});
 $factory->define(App\Activity::class, function (Faker\Generator $faker) {
+    $array = [];
+    foreach (range(0, rand(0, 3)) as $value) {
+        $array[$value] = new stdClass();
+        $array[$value]->begin_time = $faker->numberBetween();
+        $array[$value]->end_time = $array[$value]->begin_time + 1000000;
+        $array[$value]->place = $faker->word;
+        $array[$value]->stage = $faker->word;
+    }
     return [
         'title' => $faker->word,
         'abstract' => $faker->word,
-        'schedule' => $faker->text,
-        'sign_up_url' => $faker->word,
-        'poster_url' => $faker->word,
+        'schedule' => serialize($array),
+        'sign_up_url' => $faker->url,
     ];
 });
 
@@ -43,6 +31,74 @@ $factory->define(App\CompetitionTeam::class, function (Faker\Generator $faker) {
     return [
         'team_name' => $faker->word,
         'slogen' => $faker->word,
+    ];
+});
+
+$factory->define(App\ComRepairTrick::class, function (Faker\Generator $faker) {
+    return [
+        'content' => $faker->text,
+    ];
+});
+
+$factory->define(App\ComReport::class, function (Faker\Generator $faker) {
+    return [
+        'content' => $faker->text,
+    ];
+});
+
+$factory->define(App\Feedback::class, function (Faker\Generator $faker) {
+    return [
+        'user_id' => rand(1, 20),
+        'content' => $faker->text,
+    ];
+});
+
+$factory->define(App\FeedbackResponse::class, function (Faker\Generator $faker) {
+    return [
+        'content' => $faker->text,
+    ];
+});
+
+$factory->define(App\Forilegium::class, function (Faker\Generator $faker) {
+    return [
+        'title' => $faker->word,
+        'abstract' => $faker->word,
+    ];
+});
+
+$factory->define(App\QQUser::class, function (Faker\Generator $faker) {
+    $class = new stdClass();
+    $class->nick_name = $faker->word;
+    $class->figureurl = $faker->url;
+    return [
+        'open_id' => $faker->word,
+        'access_token' => $faker->word,
+        'refresh_token' => $faker->word,
+        'user_info' => serialize($class),
+    ];
+});
+
+$factory->define(App\RepairTrick::class, function (Faker\Generator $faker) {
+    return [
+        'title' => $faker->word,
+        'abstract' => $faker->word,
+    ];
+});
+
+$factory->define(App\Report::class, function (Faker\Generator $faker) {
+    return [
+        'title' => $faker->word,
+        'abstract' => $faker->word,
+    ];
+});
+
+$factory->define(App\User::class, function (Faker\Generator $faker) {
+    return [
+        'username' => $faker->userName,
+        'password' => bcrypt($faker->password),
+        'nickname' => $faker->word,
+        'regis_time' => $faker->dateTimeBetween(),
+        'login_time' => $faker->dateTimeBetween(),
     ];
 });
 
