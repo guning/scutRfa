@@ -21,6 +21,8 @@ class CreateFeedbackResponse extends Migration
             //$table->foreign('user_id')->references('id')->on('user');
             $table->integer('question_id', false, true)->comment('提问表外键');
             $table->index('question_id');
+            $table->integer('admin_id', false, true)->comment('回应的管理员');
+            $table->index('admin_id');
             //$table->foreign('question_id')->references('id')->on('feedback');
             $table->text('content')->comment('回答内容');
             $table->integer('created_at', false, true)->comment('创建时间戳');

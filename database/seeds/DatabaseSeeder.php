@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(Forilegium::class);
         $this->call(Activity::class);
         $this->call(CompetitionSeeder::class);
+        $this->call(Admin::class);
     }
 }
