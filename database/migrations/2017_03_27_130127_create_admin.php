@@ -16,6 +16,8 @@ class CreateAdmin extends Migration
             $table->increments('id');
             $table->char('username', 32)->comment('管理员用户名');
             $table->char('password', 64)->comment('管理员加密后的密码');
+            $table->char('nickname', 32)->comment('管理员昵称');
+            $table->tinyInteger('authority', false, false)->default(0);
         });
     }
 
