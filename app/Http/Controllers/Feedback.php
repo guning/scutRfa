@@ -20,11 +20,11 @@ class Feedback extends Controller
     {
         $index = $this->request->input('index');
         $offset = ($index - 1) * 30;
-        $feedbacks = FeedbackModel::with('FeedbackResponse')->where('user_id', '=', $this->getUserId())
+        $feedbacks = FeedbackModel::with('FeedbackResponse.admin')->where('user_id', '=', $this->getUserId())
             ->orderBy('id', 'desc')
             ->offset($offset)
             ->limit(30)
-            ->get();
+            ->get(); 
         return response()->json($this->makeScanMessageBag($feedbacks));
     }
 
@@ -54,8 +54,15 @@ class Feedback extends Controller
         foreach ($feedbacks as $key => $feedback) {
             $message_bag['feedback'][$key]["feedbackCreateTime"] = $feedback->created_at->timestamp;
             $message_bag['feedback'][$key]["feedbackContent"] = $feedback->content;
-            $message_bag['feedback'][$key]["respondCreateTime"] = $feedback->FeedbackResponse->created_at->timestamp;
-            $message_bag['feedback'][$key]["respondContent"] = $feedback->FeedbackResponse->content;
+            if ($feedback->FeedbackResponse != NULL) {
+                $message_bag['feedback'][$key]["respondCreateTime"] = $feedback->FeedbackResponse->created_at->timestamp;
+                $message_bag['feedback'][$key]["respondContent"] = $feedback->FeedbackResponse->content;
+                $message_bag['feedback'][$key]["responseAdmin"] = $feedback->FeedbackResponse->admin->nickname;
+            } else {
+                $message_bag['feedback'][$key]["respondCreateTime"] = '';
+                $message_bag['feedback'][$key]["respondContent"] = '';
+                $message_bag['feedback'][$key]["responseAdmin"] = '';
+            }
         }
         return $message_bag;
     }

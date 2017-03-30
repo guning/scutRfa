@@ -55,7 +55,7 @@ $factory->define(App\Feedback::class, function (Faker\Generator $faker) {
 $factory->define(App\FeedbackResponse::class, function (Faker\Generator $faker) {
     return [
         'content' => $faker->text,
-        'admin_id' => rand(1, 3),
+        'admin_id' => rand(1, 4),
     ];
 });
 

@@ -1,18 +1,17 @@
 <?php
-
 return [
-
+    
     /*
-    |--------------------------------------------------------------------------
-    | Application Environment
-    |--------------------------------------------------------------------------
-    |
-    | This value determines the "environment" your application is currently
-    | running in. This may determine how you prefer to configure various
-    | services your application utilizes. Set this in your ".env" file.
-    |
-    */
-
+     * |--------------------------------------------------------------------------
+     * | Application Environment
+     * |--------------------------------------------------------------------------
+     * |
+     * | This value determines the "environment" your application is currently
+     * | running in. This may determine how you prefer to configure various
+     * | services your application utilizes. Set this in your ".env" file.
+     * |
+     */
+    
     'env' => env('APP_ENV', 'production'),
 
     /*
@@ -92,7 +91,7 @@ return [
     */
 
     'key' => env('APP_KEY'),
-
+    
     'cipher' => 'AES-256-CBC',
 
     /*
@@ -122,7 +121,7 @@ return [
     */
 
     'providers' => [
-
+        
         /*
          * Laravel Framework Service Providers...
          */
@@ -148,6 +147,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Ixudra\Curl\CurlServiceProvider::class,
         
         /*
          * Application Service Providers...
@@ -155,9 +155,9 @@ return [
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-
-    ],
+        App\Providers\RouteServiceProvider::class
+    ]
+    ,
 
     /*
     |--------------------------------------------------------------------------
@@ -171,7 +171,7 @@ return [
     */
 
     'aliases' => [
-
+        
         'App' => Illuminate\Support\Facades\App::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
         'Auth' => Illuminate\Support\Facades\Auth::class,
@@ -204,6 +204,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
-    ],
-
-];
+        'Curl' => Ixudra\Curl\Facades\Curl::class
+    ]
+]
+;

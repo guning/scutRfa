@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.2.45 on 2017-02-19.
+ * Generated for Laravel 5.2.45 on 2017-03-29.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -12972,6 +12972,25 @@ namespace Barryvdh\Debugbar {
     }         
 }
     
+namespace Ixudra\Curl\Facades {
+
+    class Curl {
+        
+        /**
+         * 
+         *
+         * @param $url string   The URL to which the request is to be sent
+         * @return \Ixudra\Curl\Builder 
+         * @static 
+         */
+        public static function to($url)
+        {
+            return \Ixudra\Curl\CurlService::to($url);
+        }
+        
+    }         
+}
+    
     
 namespace {
 
@@ -13036,6 +13055,8 @@ namespace {
     class Excel extends \Maatwebsite\Excel\Facades\Excel {}
     
     class Debugbar extends \Barryvdh\Debugbar\Facade {}
+    
+    class Curl extends \Ixudra\Curl\Facades\Curl {}
     
 }
 

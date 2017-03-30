@@ -45,4 +45,9 @@ class User extends Model
     {
         return $this->hasMany('App\FeedbackResponse', 'user_id', 'id');
     }
+    
+    public function qqUser()
+    {
+        return $this->hasOne('App\QQUser', 'user_id', 'id');
+    }
 }

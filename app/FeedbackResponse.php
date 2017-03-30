@@ -24,4 +24,9 @@ class FeedbackResponse extends Model
     {
         return $this->belongsTo('App\Feedback', 'question_id', 'id');
     }
+    
+    public function admin()
+    {
+        return $this->belongsTo('App\Admin', 'admin_id', 'id');
+    }
 }

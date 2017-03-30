@@ -21,3 +21,22 @@ Route::get('competition/sign-up', function() {
 
 Route::get('competition/export', 'Competition@export');
 
+Route::get('feedback/get', 'Feedback@scan');
+
+Route::post('feedback/submit', 'Feedback@handIn');
+
+Route::get('activity/preview', 'Activity@preview');
+
+Route::get('user/getUserInfo', 'UserInfo@common');
+
+Route::get('user/avantar', 'UserInfo@getAvantar');
+
+Route::get('user/authorize', 'Authorize@login');
+
+Route::get('user/authorizeSuccess', 'Authorize@authorizeSuccess');
+
+Route::get('test', 'Authorize@test');
+
+Route::get('response/verify-identity-fail', 'ResponseRedirect@verifyIdentityFail');
+
+Route::get('response/lack-authority', 'ResponseRedirect@lackAuthority');

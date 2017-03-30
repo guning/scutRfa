@@ -13,10 +13,12 @@ class Feedback extends Seeder
     {
         //
         factory(App\Feedback::class, 40)->create()->each(function($feedback){
-            $feedback->feedbackResponse()->save(factory(App\FeedbackResponse::class)->make([
-                'user_id' => $feedback->user_id,
-                'question_id' => $feedback->id,
-            ]));
+            if(rand(1, 3) != 1) {
+                $feedback->feedbackResponse()->save(factory(App\FeedbackResponse::class)->make([
+                    'user_id' => $feedback->user_id,
+                    'question_id' => $feedback->id,
+                ]));
+            }
         });
     }
 }
