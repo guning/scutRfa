@@ -5,8 +5,7 @@ use Ixudra\Curl\Facades\Curl;
 use App\Http\Requests\Request;
 use App\QQUser;
 use App\User;
-use Exceptions\RetrieveAuthorizationCodeException;
-
+use Exceptions\AuthorizeException;
 
 class Authorize extends Controller
 {
@@ -16,6 +15,13 @@ class Authorize extends Controller
     const APP_KEY = '2333';
 
     const REDIRECT_URL = '';
+
+    protected $request;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
 
     public function login()
     {
@@ -32,9 +38,9 @@ class Authorize extends Controller
         return $view;
     }
 
-    public function authorizeSuccess(Request $request)
+    public function authorizeSuccess()
     {
-        $authorizationCode = $this->getAuthorizationCode($request);
+        $authorizationCode = $this->getAuthorizationCode();
         $tokens = $this->getTokens($authorizationCode);
         $open_id = $this->getOpenId($tokens['access_token']);
         $user_info = $this->getUserInfoFromQQServer($open_id, $tokens['access_token']);
@@ -52,18 +58,18 @@ class Authorize extends Controller
         }
     }
 
-    protected function getAuthorizationCode(Request $request) 
+    protected function getAuthorizationCode()
     {
-        $authorizationCode = $request->input('code');
-        if(strlen($authorizationCode) != 32) {
-            throw new RetrieveAuthorizationCodeException($authorizationCode);
+        $authorizationCode = $this->request->input('code');
+        if (strlen($authorizationCode) != 32) {
+            throw new AuthorizeException($authorizationCode);
         }
-        $state = $request->input('state');
+        $state = $this->request->input('state');
         if ($state != session('state')) {
-            throw new RetrieveAuthorizationCodeException();
+            throw new AuthorizeException('STATE_NOT_MATCH');
         }
     }
-    
+
     protected function getTokens($authorizationCode)
     {
         $dataString = Curl::to('https://graph.qq.com/oauth2.0/token')->withData(array(
@@ -73,6 +79,9 @@ class Authorize extends Controller
             'code' => $authorizationCode,
             'redirect_uri' => self::REDIRECT_URL
         ))->get();
+        if ($this->request->input('code', null) != null) {
+            throw new AuthorizeException($this->request->input('code'));
+        }
         $tokens['access_token'] = substr($dataString, 13, 32);
         $tokens['refresh_token'] = substr($dataString, - 32);
         return $tokens;
@@ -83,7 +92,11 @@ class Authorize extends Controller
         $jsonData = Curl::to('https://graph.qq.com/oauth2.0/me')->withData(array(
             'access_token' => $accessToken
         ))->get();
-        return json_decode($jsonData)['openid'];
+        $data = json_decode($jsonData);
+        if (array_get($data, 'code', null) != null) {
+            throw new AuthorizeException($data['code']);
+        }
+        return $data['openid'];
     }
 
     protected function getUserInfoFromQQServer($openId, $accessToken)
@@ -93,9 +106,13 @@ class Authorize extends Controller
             'openid' => $openId,
             'oauth_consumer_key' => self::APP_ID
         ))->get();
-        return json_decode($jsonData);
+        $data = json_decode($jsonData);
+        if ($data['code'] != 0) {
+            throw new AuthorizeException($data['code']);
+        }
+        return $data;
     }
-    
+
     protected function makeUserInfoObj($userInfo)
     {
         $userInfoObj = new \stdClass();
