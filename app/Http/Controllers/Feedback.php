@@ -31,6 +31,7 @@ class Feedback extends Controller
     public function handIn()
     {
         $content = $this->request->input('content');
+        $content = htmlspecialchars($content, ENT_QUOTES | ENT_HTML5);
         FeedbackModel::create(array(
             'content' => $content,
             'created_at' => time(),
