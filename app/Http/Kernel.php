@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\uploadHtml;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -48,5 +49,7 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Foundation\Http\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+
+        'uploadHtml'=>\App\Http\Middleware\uploadHtml::class,   //上传html代码用的中间件
     ];
 }

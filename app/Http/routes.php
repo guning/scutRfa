@@ -39,4 +39,14 @@ Route::get('test', 'Authorize@test');
 
 Route::get('response/verify-identity-fail', 'ResponseRedirect@verifyIdentityFail');
 
+
 Route::get('response/lack-authority', 'ResponseRedirect@lackAuthority');
+
+Route::get('response/fail', 'ResponseRedirect@fail');
+
+Route::group(['prefix' => 'article'],function(){
+    Route::post('uploadHtml',[
+        'middleware'    =>'uploadHtml',
+        'uses'          =>'Article@uploadHtml'
+    ]);
+});

@@ -14,4 +14,8 @@ class ResponseRedirect extends Controller
     {
         return response()->json(array('state' => 'lackAuthority'));
     }
+
+    public function fail(){
+        return response()->json(array('state' => 'fail'));
+    }
 }
