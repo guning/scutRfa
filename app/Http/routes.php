@@ -49,4 +49,5 @@ Route::group(['prefix' => 'article'],function(){
         'middleware'    =>'uploadHtml',
         'uses'          =>'Article@uploadHtml'
     ]);
+    Route::get('getHtml','Article@getHtml');
 });

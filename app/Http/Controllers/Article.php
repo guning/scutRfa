@@ -15,8 +15,12 @@ use Illuminate\Support\Facades\Storage;
 class Article extends Controller{
 
     /**
-     * 管理员上传Html代码用，到时候还需要一个admin中间件
+     * 管理员用文章上传接口
+     * 文章的原始html字符串会保留在uploadHtml盘内，文件命名：
+     *      type-$id
      *
+     * @param Request $request
+     * @return string
      */
     public function uploadHtml(Request $request){
         $type = $request->input('type');
@@ -36,14 +40,13 @@ class Article extends Controller{
         $ormObj->title = $title;
         $ormObj->abstract = $abstract;
         $ormObj->save();
-        //获取id
+
         $id = $ormObj->id;
 
-
-        //文章存放至文件中
         $bool = Storage::disk('uploadHtml')->put($type.'-'.$id,$content);
 
         $response = new \stdClass();
+
         if($bool){
             $response->status = 'success';
         }else{
@@ -51,8 +54,29 @@ class Article extends Controller{
         }
 
         return json_encode($response);
+    }
 
+    public function getHtml(Request $request){
+        $response = new \stdClass();
 
+        //我在犹豫这些要不要写到中间件里
+        if (
+            !$request->exists('type')
+            ||!$request->exists('id')
+        ){
+            $response->status = 'fail';
+            return json_encode($response);
+        }
+        $type = $request->input('type');
+        $id = $request->input('id');
 
+        if (!preg_match('/^((report)|(repairSkill)|(share))$/',$type)){
+            $response->status = 'fail';
+            return json_encode($response);
+        }
+
+        $response->status = 'success';
+        $response->content = Storage::disk('uploadHtml')->get($type.'-'.$id);
+        return json_encode($response);
     }
 }
