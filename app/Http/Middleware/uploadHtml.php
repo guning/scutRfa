@@ -16,12 +16,27 @@ class uploadHtml
     public function handle($request, Closure $next)
     {
 
-        if (!($request->exists('type'))&&($request->exists('content')))
+        if (
+            !$request->exists('type')
+            ||!$request->exists('title')
+            ||!$request->exists('content')
+        ){
             return redirect('response/fail');
+        }
 
         $type = $request->input('type');
+
         if (!preg_match('/^((report)|(repairSkill)|(share))$/',$type))
             return redirect('response/fail');
+
+        if ($type = 'share'){
+            if(!$request->exists('abstract'))
+                return redirect('response/fail');
+        }else{
+            if( $request->exists('abstract'))
+                return redirect('response/fail');
+        }
+
 
 
         //视情况也要对content做参数过滤，这里留个空吧
