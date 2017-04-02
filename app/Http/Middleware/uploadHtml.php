@@ -29,7 +29,7 @@ class uploadHtml
         if (!preg_match('/^((report)|(repairSkill)|(share))$/',$type))
             return redirect('response/fail');
 
-        if ($type = 'share'){
+        if ($type == 'share'){
             if(!$request->exists('abstract'))
                 return redirect('response/fail');
         }else{
