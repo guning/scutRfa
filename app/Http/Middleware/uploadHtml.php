@@ -18,26 +18,23 @@ class uploadHtml
 
         if (
             !$request->exists('type')
-            ||!$request->exists('title')
-            ||!$request->exists('content')
+            ||!$request->has('title')
+            ||!$request->has('content')
+            ||!$request->has('abstract')
+            ||!$request->has('surfacePlot')
         ){
             return redirect('response/fail');
         }
 
         $type = $request->input('type');
+        $surfacePlot = $request->input('surfacePlot');
 
-        if (!preg_match('/^((report)|(repairSkill)|(share))$/',$type))
+        if (
+            !preg_match('/^((report)|(repairSkill)|(share))$/',$type)
+            ||!file_exists('img/surfacePlot/'.$surfacePlot)
+        ){
             return redirect('response/fail');
-
-        if ($type == 'share'){
-            if(!$request->exists('abstract'))
-                return redirect('response/fail');
-        }else{
-            if( $request->exists('abstract'))
-                return redirect('response/fail');
         }
-
-
 
         //视情况也要对content做参数过滤，这里留个空吧
 

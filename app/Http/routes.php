@@ -49,5 +49,13 @@ Route::group(['prefix' => 'article'],function(){
         'middleware'    =>'uploadHtml',
         'uses'          =>'Article@uploadHtml'
     ]);
+    Route::post('uploadSurfacePlot',[
+        'middleware'    =>'uploadSurfacePlot',
+        'uses'          =>'Article@uploadSurfacePlot'
+    ]);
     Route::get('getHtml','Article@getHtml');
+});
+
+Route::any('',function(){
+    return view('admin/test');
 });
