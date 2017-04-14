@@ -25,7 +25,6 @@ class Article extends Controller{
      */
     public function uploadSurfacePlot(Request $request){
         $image = $request->file('picture');
-        $realPath  = $image->getRealPath();
         $ext = $image->getClientOriginalExtension();
         $tempFileName = 'pending'.'-'.date('Y-m-d-H-i-s').'-'.uniqid().'.'.$ext;
         $response = new \stdClass();
@@ -38,7 +37,7 @@ class Article extends Controller{
             return json_encode($response);
         }
 
-        $response->status = 'success';
+        $response->state = 'success';
         $response->surfacePlot = $tempFileName;
         return json_encode($response);
     }
@@ -86,7 +85,7 @@ class Article extends Controller{
             return json_encode($response);
         }
 
-        $response->status = 'success';
+        $response->state = 'success';
         return json_encode($response);
     }
 
@@ -97,11 +96,49 @@ class Article extends Controller{
      * @return string
      */
     public function updateHtml(Request $request){
+        $type = $request->input('type');
+        $id = $request->input('id');
+        $title = $request->input('title');
+        $abstract = $request->input('abstract');
+        $content = $request->input('content');
+
+        if($request->has('surfacePlot')){
+            $newSurfacePlot = true;
+            $surfacePlot = $request->input('surfacePlot');//标题图临时文件名
+            $ext = self::getExtend($surfacePlot);
+        }else{
+            $newSurfacePlot = false;
+        }
+
         $response = new \stdClass();
 
+        //我的锅，用了MyISAM，开不了事务了
+        //DB::beginTransaction();//开启事务
+        try{
+            //文章索引存放至数据库
+            if($type == 'repairSkill'){
+                $ormObj = new RepairTrick();
+            }elseif($type == 'report'){
+                $ormObj = new Report();
+            }/*elseif($type = 'share'){
+            $DB = new Chapter();
+        }*/
+            $ormObj->id = $id;
+            $ormObj->title = $title;
+            $ormObj->abstract = $abstract;
+            $ormObj->save();
 
+            Storage::disk('uploadHtml')->put($type.'-'.$id,$content);//文章内容存放至磁盘
+            if($newSurfacePlot){
+                rename('imgd/surfacePlot/'.$surfacePlot,'img/surfacePlot/'.$type.'-'.$id.'.'.$ext);
+            }//标题图重命名
+        }catch(\Exception $e) {
+            //DB::rollBack();//回滚数据库
+            $response->state = 'fail';
+            return json_encode($response);
+        }
 
-        $response->status = 'success';
+        $response->state = 'success';
         return json_encode($response);
     }
 
@@ -121,7 +158,7 @@ class Article extends Controller{
             !$request->exists('type')
             ||!$request->exists('id')
         ){
-            $response->status = 'fail';
+            $response->state = 'fail';
             return json_encode($response);
         }
         $type = $request->input('type');
@@ -132,8 +169,58 @@ class Article extends Controller{
             return json_encode($response);
         }
 
-        $response->status = 'success';
+        $response->state = 'success';
         $response->content = Storage::disk('uploadHtml')->get($type.'-'.$id);
+        return json_encode($response);
+    }
+
+    /**
+     * 文章列表预览页
+     * 糟糕，好像效率有点低，我暂时不敢把参数过滤写到中间件里
+     *
+     * @param Request $request
+     * @return string
+     */
+    public function preview(Request $request){
+        $response = new \stdClass();
+
+        if (
+            !$request->has('type')
+            ||!$request->has('num')
+        ){
+            $response->state = 'fail';
+            return json_encode($response);
+        }
+
+        $type = $request->input('type');
+        if($request->has('page')){
+            $page = $request->input('page');
+        }else{
+            $page = 1;
+        }
+        $num = $request->input('num');
+
+        if(!preg_match('/^((report)|(repairSkill)|(share))$/',$type)){
+            $response->state = 'fail';
+            return json_encode($response);
+        }
+
+        try{
+            if($type == 'repairSkill'){
+                $ormObj = new RepairTrick();
+            }elseif($type == 'report'){
+                $ormObj = new Report();
+            }
+            //分页操作
+            $response->totalPage = ceil($ormObj::count() / $num);
+            $response->report = $ormObj::skip(($page - 1) * $num )->take($num)
+                ->select('id','title','abstract','updated_at as updateTime')->get();
+        }catch(\Exception $e) {
+            //DB::rollBack();//回滚数据库
+            $response->state = 'fail';
+            return json_encode($response);
+        }
+        $response->state = 'success';
         return json_encode($response);
     }
 

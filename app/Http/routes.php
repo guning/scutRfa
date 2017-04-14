@@ -54,6 +54,7 @@ Route::group(['prefix' => 'article'],function(){
         'uses'          =>'Article@uploadSurfacePlot'
     ]);
     Route::get('getHtml','Article@getHtml');
+    Route::get('preview','Article@preview');
 });
 
 Route::any('',function(){
