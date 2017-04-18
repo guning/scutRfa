@@ -55,6 +55,7 @@ Route::group(['prefix' => 'article'],function(){
     ]);
     Route::get('getHtml','Article@getHtml');
     Route::get('preview','Article@preview');
+    Route::get('comment','Article@comment');
 });
 
 Route::any('',function(){

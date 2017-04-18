@@ -7,12 +7,15 @@
  */
 namespace App\Http\Controllers;
 
+use App\ComRepairTrick;
+use App\ComReport;
 use App\RepairTrick;
 use App\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use App\Traits\AuthOperationWithRequest;
 
 class Article extends Controller{
 
@@ -90,7 +93,8 @@ class Article extends Controller{
     }
 
     /**
-     * 相对应的，文章的更新
+     * 文章的更新
+     * 还需要注册Admin中间件
      *
      * @param Request $request
      * @return string
@@ -184,6 +188,7 @@ class Article extends Controller{
     public function preview(Request $request){
         $response = new \stdClass();
 
+        //参数过滤
         if (
             !$request->has('type')
             ||!$request->has('num')
@@ -193,6 +198,60 @@ class Article extends Controller{
         }
 
         $type = $request->input('type');
+        $num = $request->input('num');
+        $user_id = $this->getUserId();
+        if($request->has('page')){
+            $page = $request->input('page');
+        }else{
+            $page = 1;
+        }
+
+        if(!preg_match('/^((report)|(repairSkill)|(share))$/',$type)){
+            $response->state = 'fail';
+            return json_encode($response);
+        }
+
+        //执行
+        try{
+            if($type == 'repairSkill'){
+                $ormObj = new RepairTrick();
+            }elseif($type == 'report'){
+                $ormObj = new Report();
+            }
+            //分页操作
+            $response->totalPage = ceil($ormObj->count('id') / $num);
+            $response->report = $ormObj->skip(($page - 1) * $num )->take($num)
+                ->orderBy('id','asc')
+                ->select('id','title','abstract','updated_at as updateTime')->get();
+        }catch(\Exception $e) {
+            //DB::rollBack();//回滚数据库
+            $response->state = 'fail';
+            return json_encode($response);
+        }
+        $response->state = 'success';
+        return json_encode($response);
+    }
+
+    /**
+     * 评论翻页
+     *
+     * @param Request $request
+     * @return string
+     */
+    public function comment(Request $request){
+        $response = new \stdClass();
+        //参数过滤
+        if (
+            !$request->has('type')
+            ||!$request->has('num')
+            ||!$request->has('id')
+        ){
+            $response->state = 'fail';
+            return json_encode($response);
+        }
+
+        $type = $request->input('type');
+        $id = $request->input('id');
         if($request->has('page')){
             $page = $request->input('page');
         }else{
@@ -205,24 +264,61 @@ class Article extends Controller{
             return json_encode($response);
         }
 
+        //执行
         try{
             if($type == 'repairSkill'){
-                $ormObj = new RepairTrick();
+                $ormObj = new ComRepairTrick();
+                $comTableName = 'com_repair_trick';
             }elseif($type == 'report'){
-                $ormObj = new Report();
+                $ormObj = new ComReport();
+                $comTableName = 'com_report';
             }
             //分页操作
-            $response->totalPage = ceil($ormObj::count() / $num);
-            $response->report = $ormObj::skip(($page - 1) * $num )->take($num)
-                ->select('id','title','abstract','updated_at as updateTime')->get();
+            //以下的操作使用orm自带的渴求式加载,然而嵌套渴求式加载代码太繁琐，并且执行开销过大，我打算换成用查询构建器来重新写一遍
+//            $ormObj = $ormObj::where('article_id' , $id)
+//                ->skip(($page - 1) * $num )->take($num)
+//                ->select('id','user_id','created_at as createTime','content');
+//            $response->totalPage = ceil($ormObj->count('id') / $num);
+//            $response->comment = $ormObj->with(['user.qqUser' => function($query){
+//                $query->select('user_info');
+//            }])->get();     //奇葩的嵌套渴求式加载，然而选择的条件只能针对最后一张表。。。
+//
+//            foreach ($response->comment as &$value){
+//                $nickName = unserialize($value->user->qquser->user_info)->nick_name;
+//                unset($value->user);
+//                unset($value->user_id);
+//                $value->user = $nickName;
+//            }
+
+            //使用查询构建器写的版本
+            $ormObj = $ormObj::where('article_id' , $id)
+                ->orderBy("$comTableName.id",'asc')
+                ->skip(($page - 1) * $num )->take($num);
+                //->select('id','user_id','created_at as createTime','content');
+            $response->totalPage = ceil($ormObj->count('id') / $num);
+            $response->comment = $ormObj
+                ->join('qq_user' , "$comTableName.user_id" , '=' ,'qq_user.user_id')
+                ->select(
+                    "$comTableName.id",
+                    "$comTableName.created_at as createTime",
+                    "$comTableName.content",
+                    'qq_user.user_info')
+                ->get();
+
+            foreach ($response->comment as &$value){
+                $nickName = unserialize($value->user_info)->nick_name;
+                unset($value->user_info);
+                $value->user = $nickName;
+            }
         }catch(\Exception $e) {
-            //DB::rollBack();//回滚数据库
             $response->state = 'fail';
             return json_encode($response);
         }
         $response->state = 'success';
-        return json_encode($response);
+        return dd(json_decode(json_encode($response)));
+//        return json_encode($response->comment[1]->user->qquser->user_info);//dd(json_decode(json_encode($response))) ;
     }
+
 
     /**
      * 正则搜索文件名中的拓展名
