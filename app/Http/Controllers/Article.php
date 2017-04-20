@@ -15,9 +15,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
-use App\Traits\AuthOperationWithRequest;
 
 class Article extends Controller{
+
 
     /**
      * 管理员用标题图上传接口
@@ -252,12 +252,14 @@ class Article extends Controller{
 
         $type = $request->input('type');
         $id = $request->input('id');
+        $num = $request->input('num');
+        $userId = $request->session()->get('user_id', 0);
+
         if($request->has('page')){
             $page = $request->input('page');
         }else{
             $page = 1;
         }
-        $num = $request->input('num');
 
         if(!preg_match('/^((report)|(repairSkill)|(share))$/',$type)){
             $response->state = 'fail';
@@ -302,21 +304,137 @@ class Article extends Controller{
                     "$comTableName.id",
                     "$comTableName.created_at as createTime",
                     "$comTableName.content",
-                    'qq_user.user_info')
+                    "$comTableName.thumb_up",
+                    'qq_user.user_info'
+                )
                 ->get();
 
             foreach ($response->comment as &$value){
                 $nickName = unserialize($value->user_info)->nick_name;
-                unset($value->user_info);
+                $thumbUp = unserialize($value->thumb_up);//这里thumbUp是个被序列化的数组，可以查数据库的md文档
+
                 $value->user = $nickName;
+                $value->isThumbUp = in_array($userId , $thumbUp) ? 1 : 0;
+                $value->thumbUpNum = count($thumbUp);
+
+                unset($value->thumb_up);
+                unset($value->user_info);
             }
         }catch(\Exception $e) {
             $response->state = 'fail';
             return json_encode($response);
         }
         $response->state = 'success';
+        return json_encode($response) ;
+    }
+
+    /**
+     * 提交评论，尚需注册Auth中间件
+     *
+     * @param Request $request
+     * @return string
+     */
+    public function submitComment(Request $request){
+        $response = new \stdClass();
+        //参数过滤
+        if (
+            !$request->has('type')
+            ||!$request->has('content')
+            ||!$request->has('id')
+
+        ){
+            $response->state = 'fail';
+            return json_encode($response);
+        }
+
+        $type = $request->input('type');
+        $content = $request->input('content');
+        $id = $request->input('id');
+        $userId = intval($request->session()->get('user_id'));
+
+        if(!preg_match('/^((report)|(repairSkill)|(share))$/',$type)){
+            $response->state = 'fail';
+            return json_encode($response);
+        }
+
+        //执行
+        try{
+            if($type == 'repairSkill'){
+                $ormObj = new ComRepairTrick();
+            }elseif($type == 'report'){
+                $ormObj = new ComReport();
+            }
+            $ormObj->article_id = $id;
+            $ormObj->user_id = $userId;
+            $ormObj->content = $content;
+            $ormObj->thumb_up = serialize([]);//空数组
+
+            $ormObj->save();
+
+        }catch(\Exception $e) {
+            $response->state = 'fail';
+            return json_encode($response);
+        }
+        $response->state = 'success';
+        return json_encode($response);
+    }
+
+
+    /**
+     * 点赞/取消点赞，切换状态，尚需注册Auth中间件
+     *
+     * @param Request $request
+     * @return string
+     */
+    public function thumbUpComment(Request $request){
+        $response = new \stdClass();
+        //参数过滤
+        if (
+            !$request->has('type')
+            ||!$request->has('id')
+        ){
+            $response->state = 'fail';
+            return json_encode($response);
+        }
+
+        $type = $request->input('type');
+        $id = $request->input('id');
+        $userId = intval($request->session()->get('user_id'));
+
+        if(!preg_match('/^((report)|(repairSkill)|(share))$/',$type)){
+            $response->state = 'fail';
+            return json_encode($response);
+        }
+
+        //执行
+        try{
+            if($type == 'repairSkill'){
+                $ormObj = new ComRepairTrick();
+            }elseif($type == 'report'){
+                $ormObj = new ComReport();
+            }
+            $ormObj = $ormObj->find($id);//通过主键调取模型
+            
+            //转变点赞和不点赞的状态
+            $thumbUp = unserialize($ormObj->thumb_up);
+            if(in_array($userId , $thumbUp)){
+                //取消赞
+                unset($thumbUp[array_search($userId , $thumbUp)]);
+//                $thumbUp = array_splice($thumbUp , array_search($userId , $thumbUp) , 1);//这个写法失败了，不知道为什么
+            }else{
+                //点赞
+                $thumbUp[] = $userId;
+            }
+            $ormObj->thumb_up = serialize($thumbUp);
+            $ormObj->save();
+        }catch(\Exception $e) {
+            $response->state = 'fail';
+            return json_encode($response);
+        }
+
+        $response->state = 'success';
+        $response->isThumbUp = in_array($userId , unserialize($ormObj->thumb_up)) ? 1 : 0;
         return dd(json_decode(json_encode($response)));
-//        return json_encode($response->comment[1]->user->qquser->user_info);//dd(json_decode(json_encode($response))) ;
     }
 
 
