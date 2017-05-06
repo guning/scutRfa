@@ -19,6 +19,7 @@ class CreateComRepairTrick extends Migration
             $table->integer('article_id', false, true);
             $table->index('article_id');
             $table->text('content');
+            $table->text('thumb_up');
             $table->integer('created_at', false, true);
         });
     }

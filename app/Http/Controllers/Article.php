@@ -47,7 +47,6 @@ class Article extends Controller{
 
     /**
      * 管理员用文章上传
-     * 当前使用中间件uploadHtml,后续还会加上Admin中间件
      * 文章的原始html字符串会保留在uploadHtml盘内，文件命名：
      *      type-$id
      *
@@ -94,7 +93,6 @@ class Article extends Controller{
 
     /**
      * 文章的更新
-     * 还需要注册Admin中间件
      *
      * @param Request $request
      * @return string
@@ -329,7 +327,7 @@ class Article extends Controller{
     }
 
     /**
-     * 提交评论，尚需注册Auth中间件
+     * 提交评论
      *
      * @param Request $request
      * @return string
@@ -381,7 +379,7 @@ class Article extends Controller{
 
 
     /**
-     * 点赞/取消点赞，切换状态，尚需注册Auth中间件
+     * 点赞/取消点赞，切换状态
      *
      * @param Request $request
      * @return string
