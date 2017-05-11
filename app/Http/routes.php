@@ -67,6 +67,10 @@ Route::group(['prefix' => 'article'],function(){
         'middleware'    =>['Admin','uploadSurfacePlot'],
         'uses'          =>'Article@uploadSurfacePlot'
     ]);
+    Route::post('uploadPoster',[
+        'middleware'    =>['Admin','uploadPoster'],
+        'uses'          =>'Article@uploadPoster'
+    ]);
     Route::post('updateHtml',[
         'middleware'    =>['Admin','updateHtml'],
         'uses'          =>'Article@uploadSurfacePlot'
@@ -84,6 +88,6 @@ Route::group(['prefix' => 'article'],function(){
     ]);
 });
 
-/*Route::any('',function(){
+Route::any('',function(){
     return view('admin/test');
-});*/
+});
