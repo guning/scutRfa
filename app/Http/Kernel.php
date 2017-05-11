@@ -16,6 +16,7 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+        \App\Http\Middleware\Cors::class
     ];
 
     /**
@@ -50,6 +51,7 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
 
-        'uploadHtml'=>\App\Http\Middleware\uploadHtml::class,   //上传html代码用的中间件
+        'uploadHtml'=>\App\Http\Middleware\uploadHtml::class,
+        'uploadSurfacePlot'=>\App\Http\Middleware\uploadSurfacePlot::class,
     ];
 }

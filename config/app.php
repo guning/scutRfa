@@ -148,6 +148,8 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Ixudra\Curl\CurlServiceProvider::class,
+
+        Intervention\Image\ImageServiceProvider::class,
         
         /*
          * Application Service Providers...
@@ -204,7 +206,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
-        'Curl' => Ixudra\Curl\Facades\Curl::class
+        'Curl' => Ixudra\Curl\Facades\Curl::class,
+        'Image' => Intervention\Image\Facades\Image::class,
     ]
 ]
 ;

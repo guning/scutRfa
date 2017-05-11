@@ -23,6 +23,7 @@ class CreateComReport extends Migration
             $table->index('article_id');
             //$table->foreign('article_id')->references('id')->on('report');
             $table->text('content')->comment('评论内容');
+            $table->text('thumb_up');
             $table->integer('created_at', false, true)->comment('创建时间戳');
         });
     }
