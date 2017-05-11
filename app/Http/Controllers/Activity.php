@@ -52,4 +52,28 @@ class Activity extends Controller
         }
         return $messageBag;
     }
+
+    /**
+     * 近期活动海报上传接口
+     *
+     * @param Request $request
+     * @return string
+     */
+    public function uploadPoster(Request $request){
+        $image = $request->file('picture');
+        $ext = $image->getClientOriginalExtension();
+        $tempFileName = 'pending'.'-'.date('Y-m-d-H-i-s').'-'.uniqid().'.'.$ext;
+        $response = new \stdClass();
+
+        try{
+            Image::make($image)->save('img/poster/'.$tempFileName);
+        }catch(\Exception $e){
+            $response->status = 'fail';
+            return json_encode($response);
+        }
+
+        $response->state = 'success';
+        $response->surfacePlot = $tempFileName;
+        return json_encode($response);
+    }
 }

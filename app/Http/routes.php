@@ -25,9 +25,16 @@ Route::group(['prefix'=>'feedback', 'middleware'=>'Auth'], function(){
     Route::get('feedback/get', 'Feedback@scan');
     Route::post('feedback/submit', 'Feedback@handIn');
 });
-/*
-*/
-Route::get('activity/preview', 'Activity@preview');
+
+/*Route::get('activity/preview', 'Activity@preview');*/
+Route::group(['prefix'=>'activity'],function(){
+    Route::get('preview', 'Activity@preview');
+    Route::post('uploadPoster',[
+        'middleware'    =>['Admin','uploadPoster'],
+        'uses'          =>'Activity@uploadPoster'
+    ]);
+
+});
 
 Route::group(['prefix'=>'user'],function(){
     Route::get('getUserInfo',[
@@ -66,10 +73,6 @@ Route::group(['prefix' => 'article'],function(){
     Route::post('uploadSurfacePlot',[
         'middleware'    =>['Admin','uploadSurfacePlot'],
         'uses'          =>'Article@uploadSurfacePlot'
-    ]);
-    Route::post('uploadPoster',[
-        'middleware'    =>['Admin','uploadPoster'],
-        'uses'          =>'Article@uploadPoster'
     ]);
     Route::post('updateHtml',[
         'middleware'    =>['Admin','updateHtml'],
