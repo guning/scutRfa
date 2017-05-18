@@ -119,6 +119,51 @@ class Activity extends Controller
         return json_encode($response);
     }
 
+
+    /**
+     * 文章的更新
+     *
+     * @param Request $request
+     * @return string
+     */
+    public function modify(Request $request){
+        $id = $request->input('id');
+        $title = $request->input('title');
+        $schedule = $request->input('schedule');
+        $content = $request->input('content');
+        $signUpLink = $request->input('signUpLink');
+        $response = new \stdClass();
+
+        if($request->has('poster')){
+            $newPoster = true;
+            $poster = $request->input('poster');//标题图临时文件名
+            $ext = self::getExtend($poster);
+        }else{
+            $newSurfacePlot = false;
+        }
+        //我的锅，用了MyISAM，开不了事务了
+        //DB::beginTransaction();//开启事务
+//        try{
+            $ormObj = ActivityModel::find($id);
+            $ormObj->title = $title;
+            $ormObj->abstract = $content;
+            $ormObj->schedule = serialize(json_decode($schedule));
+            $ormObj->sign_up_url = ($signUpLink == false) ? false : $signUpLink;
+            $ormObj->save();
+
+            if($newPoster){
+                rename('img/poster/'.$poster,'img/poster/'.$id.'.'.$ext);
+            }//标题图重命名
+//        }catch(\Exception $e) {
+//            //DB::rollBack();//回滚数据库
+//            $response->state = 'fail';
+//            return json_encode($response);
+//        }
+
+        $response->state = 'success';
+        return json_encode($response);
+    }
+
     /**
      * 正则搜索文件名中的拓展名
      * @param $fileName

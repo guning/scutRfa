@@ -25,7 +25,7 @@ Route::group(['prefix'=>'feedback', 'middleware'=>'Auth'], function(){
     Route::post('feedback/submit', 'Feedback@handIn');
 });
 
-/*Route::get('activity/preview', 'Activity@preview');*/
+//Route::get('activity/preview', 'Activity@preview');
 Route::group(['prefix'=>'activity'],function(){
     Route::get('preview', 'Activity@preview');
     Route::post('uploadPoster',[
@@ -33,8 +33,12 @@ Route::group(['prefix'=>'activity'],function(){
         'uses'          =>'Activity@uploadPoster'
     ]);
     Route::post('release',[
-        'middleware'    =>[/*'Admin',*/'release'],
+        'middleware'    =>['Admin','release'],
         'uses'          =>'Activity@release'
+    ]);
+    Route::post('modify',[
+        'middleware'    =>['Admin','modify'],
+        'uses'          =>'Activity@modify'
     ]);
 });
 

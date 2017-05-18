@@ -55,6 +55,7 @@ class Kernel extends HttpKernel
         'uploadSurfacePlot'=>\App\Http\Middleware\uploadSurfacePlot::class,
         'uploadPoster'=>\App\Http\Middleware\uploadPoster::class,
         'release'=>\App\Http\Middleware\release::class,
+        'modify'=>\App\Http\Middleware\modify::class,
 
     ];
 }

@@ -125,7 +125,7 @@ class Article extends Controller{
             }/*elseif($type = 'share'){
             $DB = new Chapter();
         }*/
-            $ormObj->id = $id;
+            $ormObj = $ormObj->find($id) ;
             $ormObj->title = $title;
             $ormObj->abstract = $abstract;
             $ormObj->save();
