@@ -12,7 +12,6 @@
 */
 use Illuminate\Support\Facades\Route;
 
-
 Route::post('competition/sign-up', 'Competition@register');
 
 Route::get('competition/sign-up', function() {
@@ -33,7 +32,10 @@ Route::group(['prefix'=>'activity'],function(){
         'middleware'    =>['Admin','uploadPoster'],
         'uses'          =>'Activity@uploadPoster'
     ]);
-
+    Route::post('release',[
+        'middleware'    =>[/*'Admin',*/'release'],
+        'uses'          =>'Activity@release'
+    ]);
 });
 
 Route::group(['prefix'=>'user'],function(){
@@ -92,5 +94,26 @@ Route::group(['prefix' => 'article'],function(){
 });
 
 Route::any('',function(){
-    return view('admin/test');
+//    $response = new \stdClass();
+//    $response->title = '标题';
+//    $response->content = '内容';
+//
+//    $schedule1 = new \stdClass();
+//    $schedule1->stage = '开始';
+//    $schedule1->beginTime = 3543453;
+//    $schedule1->endTime = 1400000;
+//    $schedule1->place = '沙发上';
+//    $schedule2 = new \stdClass();
+//    $schedule2->stage = '结束';
+//    $schedule2->beginTime = 14000000;
+//    $schedule2->endTime = 324234243;
+//    $schedule2->place = '速度';
+//    $response->schedule = [
+//        $schedule1,
+//        $schedule2
+//    ];
+//    $response->signUpLink = false;
+//    $response->poster = 'pending-2017-05-11-11-35-40-59144c8c923ec';
+//    return json_encode($response);
+//    return view('admin/test');
 });

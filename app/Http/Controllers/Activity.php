@@ -55,6 +55,8 @@ class Activity extends Controller
 
     /**
      * 近期活动海报上传接口
+     * 已注册uploadPoster作为中间件
+     * Admin，后台接口
      *
      * @param Request $request
      * @return string
@@ -75,5 +77,56 @@ class Activity extends Controller
         $response->state = 'success';
         $response->surfacePlot = $tempFileName;
         return json_encode($response);
+    }
+
+    /**
+     * 管理员用文章上传
+     * 已注册release作为中间件
+     *      type-$id
+     *
+     * @param Request $request
+     * @return string
+     */
+    public function release(Request $request){
+        $poster = $request->input('poster');
+        $title = $request->input('title');
+        $schedule = $request->input('schedule');
+        $content = $request->input('content');
+        $signUpLink = $request->input('signUpLink');
+        $ext = self::getExtend($poster);
+        $response = new \stdClass();
+
+        //我的锅，用了MyISAM，开不了事务了
+        //DB::beginTransaction();//开启事务
+        try{
+            $ormObj = new ActivityModel();
+            $ormObj->title = $title;
+            $ormObj->abstract = $content;
+            $ormObj->schedule = serialize(json_decode($schedule));
+            $ormObj->sign_up_url = ($signUpLink == false) ? false : $signUpLink;
+            $ormObj->save();
+
+            $id = $ormObj->id;//获取文章索引插入数据表后的id
+
+            rename('img/poster/'.$poster,'img/poster/'.$id.'.'.$ext);
+        }catch(\Exception $e) {
+            //DB::rollBack();//回滚数据库
+            $response->status = 'fail';
+            return json_encode($response);
+        }
+
+        $response->state = 'success';
+        return json_encode($response);
+    }
+
+    /**
+     * 正则搜索文件名中的拓展名
+     * @param $fileName
+     * @return mixed
+     */
+    static private function getExtend($fileName){
+        $array  = [];
+        preg_match('/(?<=\.)[a-zA-Z]+$/',$fileName,$array);
+        return $array[0];//蜜汁自信，匹配出来一定只有一个结果
     }
 }
