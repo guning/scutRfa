@@ -150,7 +150,7 @@ return [
         Ixudra\Curl\CurlServiceProvider::class,
 
         Intervention\Image\ImageServiceProvider::class,
-        
+        Stevenyangecho\UEditor\UEditorServiceProvider::class,
         /*
          * Application Service Providers...
          */

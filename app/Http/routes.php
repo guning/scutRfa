@@ -13,6 +13,7 @@
 use Illuminate\Support\Facades\Route;
 
 
+
 Route::post('competition/sign-up', 'Competition@register');
 
 Route::get('competition/sign-up', function() {
@@ -84,6 +85,26 @@ Route::group(['prefix' => 'article'],function(){
     ]);
 });
 
-/*Route::any('',function(){
-    return view('admin/test');
-});*/
+//！！！等待加入中间件！！！
+Route::group(['prefix' => 'admin', 'namespace' => 'admin'],function(){
+    Route::get('/login', function(){
+        return view('admin/index');
+    });
+
+    Route::group(['prefix' => 'xhgk'], function(){
+        Route::get('{page}', 'xhgk@show');
+        Route::post('{page}/up', 'xhgk@update');
+        Route::post('{page}/del', 'xhgk@del');
+    });
+
+    Route::group(['prefix' => 'sybj'], function(){
+        Route::get('{page}', 'sybj@show');
+        Route::post('{page}/up', 'sybj@update');
+    });
+    //Route::any('/ueditor','UeditorCtl@index');
+});
+
+
+Route::get('/', function(){
+    return view('admin/xhdt/jqhd');
+});
