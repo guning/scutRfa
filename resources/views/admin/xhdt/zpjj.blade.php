@@ -15,18 +15,17 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr id="1" class="add">
-                    <th><input type="text" class="input-sm"/></th>
-                    <th><textarea rows="10"></textarea></th>
-                    <th>
-                        <div>
-                            <button type="button" class="btn btn-default" onclick="$(this).next().click();">上传图片</button>
-                            <input type="file" accept="image/*" onchange="uploadfile(this)" style="display: none"/>
-                            <input style="display: none" name="xxxUrl" value=""/>
-                        </div>
-                    </th>
-                    <th><button type="button" class="btn btn-default" onclick="deleteEle(this);">删除</button></th>
-                </tr>
+                    <tr id="1" class="add">
+                        <th><input type="text" class="input-sm"/></th>
+                        <th><textarea rows="10"></textarea></th>
+                        <th>
+                            <div>
+                                <button type="button" class="btn btn-default" onclick="$(this).next().click();">上传图片</button>
+                                <input type="file" accept="image/*" onchange="uploadfile(this)" style="display: none"/>
+                            </div>
+                        </th>
+                        <th><button type="button" class="btn btn-default" onclick="deleteEle(this);">删除</button></th>
+                    </tr>
                 </tbody>
             </table>
             <br/>
@@ -39,14 +38,8 @@
     </div>
     <script type="text/javascript">
         function add(){
-            var elelast = $(".add:last");
-            var nextid = (elelast.length != 0)?Number(elelast.attr("id")) + 1:1;
-            var nexthtml = '<tr id="'+nextid+'" class="add"><th><input type="text" class="input-sm"/></th> <th><textarea rows="10"></textarea></th> <th><input type="file"></th> <th><button type="button" class="btn btn-default" onclick="deleteEle(this);">删除</button></th> </tr>'
-            if(nextid == 1){
-                $("tbody").append(nexthtml);
-            }else {
-                elelast.parent().append(nexthtml);
-            }
+            var nexthtml = '';
+            $("tbody").append(nexthtml);
         }
         function deleteEle(btn){
             $(btn).parent().parent().remove();

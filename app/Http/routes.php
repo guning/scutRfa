@@ -12,6 +12,8 @@
 */
 use Illuminate\Support\Facades\Route;
 
+use Illuminate\Http\Request;
+
 
 
 Route::post('competition/sign-up', 'Competition@register');
@@ -106,5 +108,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'admin'],function(){
 
 
 Route::get('/', function(){
-    return view('admin/xhdt/jqhd');
+    return view('admin/xhdt/zpjj');
+});
+Route::post('/', function(Request $request){
+    return $request->input('schedule');
 });
