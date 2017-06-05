@@ -47,8 +47,8 @@ class Article extends Controller{
 
     /**
      * 管理员用文章上传
-     * 文章的原始html字符串会保留在uploadHtml盘内，文件命名：
-     *      type-$id
+     * 文件命名：
+     *      type-id
      *
      * @param Request $request
      * @return string
@@ -80,7 +80,7 @@ class Article extends Controller{
             $id = $ormObj->id;//获取文章索引插入数据表后的id
 
             Storage::disk('uploadHtml')->put($type.'-'.$id,$content);//文章内容存放至磁盘
-            rename('imgd/surfacePlot/'.$surfacePlot,'img/surfacePlot/'.$type.'-'.$id.'.'.$ext);//标题图重命名
+            rename('img/surfacePlot/'.$surfacePlot,'img/surfacePlot/'.$type.'-'.$id.'.'.$ext);//标题图重命名
         }catch(\Exception $e) {
             //DB::rollBack();//回滚数据库
             $response->status = 'fail';
@@ -125,7 +125,7 @@ class Article extends Controller{
             }/*elseif($type = 'share'){
             $DB = new Chapter();
         }*/
-            $ormObj->id = $id;
+            $ormObj = $ormObj->find($id) ;
             $ormObj->title = $title;
             $ormObj->abstract = $abstract;
             $ormObj->save();

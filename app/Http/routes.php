@@ -12,8 +12,8 @@
 */
 use Illuminate\Support\Facades\Route;
 
-use Illuminate\Http\Request;
 
+//use Illuminate\Http\Request;
 
 
 Route::post('competition/sign-up', 'Competition@register');
@@ -28,9 +28,23 @@ Route::group(['prefix'=>'feedback', 'middleware'=>'Auth'], function(){
     Route::get('feedback/get', 'Feedback@scan');
     Route::post('feedback/submit', 'Feedback@handIn');
 });
-/*
-*/
-Route::get('activity/preview', 'Activity@preview');
+
+//Route::get('activity/preview', 'Activity@preview');
+Route::group(['prefix'=>'activity'],function(){
+    Route::get('preview', 'Activity@preview');
+    Route::post('uploadPoster',[
+        'middleware'    =>['Admin','uploadPoster'],
+        'uses'          =>'Activity@uploadPoster'
+    ]);
+    Route::post('release',[
+        'middleware'    =>['Admin','release'],
+        'uses'          =>'Activity@release'
+    ]);
+    Route::post('modify',[
+        'middleware'    =>['Admin','modify'],
+        'uses'          =>'Activity@modify'
+    ]);
+});
 
 Route::group(['prefix'=>'user'],function(){
     Route::get('getUserInfo',[
@@ -87,6 +101,7 @@ Route::group(['prefix' => 'article'],function(){
     ]);
 });
 
+
 //！！！等待加入中间件！！！
 Route::group(['prefix' => 'admin', 'namespace' => 'admin'],function(){
     Route::get('/login', function(){
@@ -110,6 +125,31 @@ Route::group(['prefix' => 'admin', 'namespace' => 'admin'],function(){
 Route::get('/', function(){
     return view('admin/xhdt/zpjj');
 });
-Route::post('/', function(Request $request){
+/*Route::post('/', function(Request $request){
     return $request->input('schedule');
-});
+=======
+Route::any('',function(){
+//    $response = new \stdClass();
+//    $response->title = '标题';
+//    $response->content = '内容';
+//
+//    $schedule1 = new \stdClass();
+//    $schedule1->stage = '开始';
+//    $schedule1->beginTime = 3543453;
+//    $schedule1->endTime = 1400000;
+//    $schedule1->place = '沙发上';
+//    $schedule2 = new \stdClass();
+//    $schedule2->stage = '结束';
+//    $schedule2->beginTime = 14000000;
+//    $schedule2->endTime = 324234243;
+//    $schedule2->place = '速度';
+//    $response->schedule = [
+//        $schedule1,
+//        $schedule2
+//    ];
+//    $response->signUpLink = false;
+//    $response->poster = 'pending-2017-05-11-11-35-40-59144c8c923ec';
+//    return json_encode($response);
+//    return view('admin/test');
+
+});*/
