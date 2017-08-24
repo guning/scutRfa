@@ -11,7 +11,7 @@ function uploadfile(thisfile){
 
     var deal = function(){
         if (this.re.test(this.file.type)){
-            this.formdata.append('picture', this.file);
+            this.formdata.append('pic', this.file);
             //this.formdata.append('page', this.id);
         }else{
             alert("文件类型不符合");
@@ -20,19 +20,21 @@ function uploadfile(thisfile){
 
     var upload = function(){
         $.ajax({
-            url : '/article/uploadSurfacePlot',
+            url : '/common/upload',
             type : 'POST',
             data : this.formdata,
             cache : false,
             processData: false,
             contentType: false,
             success : function(data){
+                //console.log(data);
                 switch (data.state){
                     case 'success':
-                        $(thisfile).next().val(data.surfacePlot);
+                        $(thisfile).next().val(data.picPath);
+                        alert('upload file success');
                         break;
                     case 'fail':
-                        console.log('失败咯');
+                        alert(data.errMes);
                         break;
                     default:
                         console.log('未登录或者权限不够');

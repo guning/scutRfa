@@ -6,23 +6,23 @@
 <div>
     <form id="dataform">
     <label>协会简介</label>
-    <textarea name="intro" rows="10">{{$results->intro}}</textarea>
+    <textarea name="intro" rows="10">{{is_null($results)?'':$results->intro}}</textarea>
     <label>上传协会简介图片</label>
     <div>
         <button type="button" class="btn btn-default" onclick="$(this).next().click();">上传图片</button>
         <input type="file" accept="image/*" onchange="uploadfile(this)" style="display: none"/>
-        <input style="display: none" name="introimgpath" value="{{$results->introimgpath}}"/>
+        <input style="display: none" name="introimgpath" value="{{is_null($results)?'':$results->introimgpath}}"/>
     </div>
     <br/><br/>
     <label>品牌活动</label>
-    <textarea name="activity" rows="10">{{$results->activity}}</textarea>
+    <textarea name="activity" rows="10">{{is_null($results)?'':$results->activity}}</textarea>
     <div>
         <div style="float: left">
             <label>上传品牌活动图片1&nbsp;&nbsp;</label>
             <div>
                 <button type="button" class="btn btn-default" onclick="$(this).next().click();">上传图片</button>
                 <input type="file" accept="image/*" onchange="uploadfile(this)" style="display: none"/>
-                <input style="display: none" name="actimgpathf" value="{{$results->actimgpathf}}"/>
+                <input style="display: none" name="actimgpathf" value="{{is_null($results)?'':$results->actimgpathf}}"/>
             </div>
         </div>
         <div style="float: left">
@@ -30,7 +30,7 @@
             <div>
                 <button type="button" class="btn btn-default" onclick="$(this).next().click();">上传图片</button>
                 <input type="file" accept="image/*" onchange="uploadfile(this)" style="display: none"/>
-                <input style="display: none" name="actimgpaths" value="{{$results->actimgpaths}}"/>
+                <input style="display: none" name="actimgpaths" value="{{is_null($results)?'':$results->actimgpaths}}"/>
             </div>
         </div>
     </div>

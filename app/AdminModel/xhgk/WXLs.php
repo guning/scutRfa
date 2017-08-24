@@ -10,8 +10,28 @@ class WXLs extends Model
     public $timestamps = false;
 
     //
-    public function selectNeed(){
-        return $this->select('id', 'position', 'name', 'wish', 'imgpath')->get();
+    public function selectNeed($mode = 0){
+        $res = $this->select('id', 'position', 'name', 'wish', 'imgpath')->get();
+        if ($mode == 1) {
+            if (is_null($res->first())) {
+                $data[0]['id'] = '';
+                $data[0]['position'] = '';
+                $data[0]['name'] = '';
+                $data[0]['wish'] = '';
+                $data[0]['img'] = '';
+            }else {
+                foreach ($res as $r) {
+                    $data[]['id'] = $r->id;
+                    $data[]['position'] = $r->position;
+                    $data[]['name'] = $r->name;
+                    $data[]['wish'] = $r->wish;
+                    $data[]['img'] = $r->imgpath;
+                }
+            }
+        } else {
+            $data = $res;
+        }
+        return $data;
     }
 
     public function updateData($data){

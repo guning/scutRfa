@@ -21,69 +21,42 @@ class Activity extends Controller
     {
         if (! $this->pageNumber && ! $this->paginate) {
             return response()->json(array(
-                'state' => false
+                'state' => 'fail'
             ));
         }
         $offset = ($this->pageNumber - 1) * $this->paginate;
-        $totalPage = ActivityModel::count('id') / $this->paginate;
+        $totalPage = ceil(ActivityModel::count('id') / $this->paginate);
         $activities = ActivityModel::orderBy('id', 'desc')->offset($offset)
             ->limit($this->paginate)
+            ->where('status', 1)
             ->get();
+        if ($activities->count() == 0) {
+            return response()->json(array(
+                'state' => 'success',
+                'totalPage' => 0
+            ));
+        }
         return $this->makePreviewMessageBag($totalPage, $activities);
     }
 
     protected function makePreviewMessageBag($totalPage, $activities)
     {
-        $messageBag['state'] = true;
+        $messageBag['state'] = 'success';
         $messageBag['totalPage'] = $totalPage;
         foreach ($activities as $key => $activitie) {
-            $schedules = unserialize($activitie->schedule);
-            foreach ($schedules as $schedule) {
-                $schedule->beginTime = $schedule->begin_time;
-                $schedule->endTime = $schedule->end_time;
-                unset($schedule->begin_time);
-                unset($schedule->end_time);
-            }
             $messageBag['activity'][$key]['id'] = $activitie->id;
             $messageBag['activity'][$key]['title'] = $activitie->title;
             $messageBag['activity'][$key]['content'] = $activitie->abstract;
-            $messageBag['activity'][$key]['schedule'] = $schedules;
-            $messageBag['activity'][$key]['signUpLink'] = $activitie->sign_up_url;
+            $messageBag['activity'][$key]['schedule'] = json_decode($activitie->schedule, true);;
+            $messageBag['activity'][$key]['way'] = json_decode($activitie->way, true);
+            $messageBag['activity'][$key]['poster'] = json_decode($activitie->poster, true);
         }
-        return $messageBag;
+        return json_encode($messageBag);
     }
 
-    /**
-     * 近期活动海报上传接口
-     * 已注册uploadPoster作为中间件
-     * Admin，后台接口
-     *
-     * @param Request $request
-     * @return string
-     */
-    public function uploadPoster(Request $request){
-        $image = $request->file('picture');
-        $ext = $image->getClientOriginalExtension();
-        $tempFileName = 'pending'.'-'.date('Y-m-d-H-i-s').'-'.uniqid().'.'.$ext;
-        $response = new \stdClass();
-
-        try{
-            Image::make($image)->save('img/poster/'.$tempFileName);
-        }catch(\Exception $e){
-            $response->status = 'fail';
-            return json_encode($response);
-        }
-
-        $response->state = 'success';
-        $response->surfacePlot = $tempFileName;
-        return json_encode($response);
-    }
 
     /**
-     * 管理员用文章上传
-     * 已注册release作为中间件
-     *      type-$id
-     *
+     * 插入活动数据
      * @param Request $request
      * @return string
      */
@@ -91,26 +64,22 @@ class Activity extends Controller
         $poster = $request->input('poster');
         $title = $request->input('title');
         $schedule = $request->input('schedule');
-        $content = $request->input('content');
-        $signUpLink = $request->input('signUpLink');
-        $ext = self::getExtend($poster);
+        $abstract = $request->input('abstract');
+        $way = $request->input('way');
         $response = new \stdClass();
 
-        //我的锅，用了MyISAM，开不了事务了
-        //DB::beginTransaction();//开启事务
         try{
             $ormObj = new ActivityModel();
             $ormObj->title = $title;
-            $ormObj->abstract = $content;
+            $ormObj->abstract = $abstract;
             $ormObj->schedule = serialize(json_decode($schedule));
-            $ormObj->sign_up_url = ($signUpLink == false) ? false : $signUpLink;
+            $ormObj->way = $way;
+            $ormObj->status = 0; //默认插入时未开启
             $ormObj->save();
 
             $id = $ormObj->id;//获取文章索引插入数据表后的id
 
-            rename('img/poster/'.$poster,'img/poster/'.$id.'.'.$ext);
         }catch(\Exception $e) {
-            //DB::rollBack();//回滚数据库
             $response->status = 'fail';
             return json_encode($response);
         }
@@ -164,14 +133,4 @@ class Activity extends Controller
         return json_encode($response);
     }
 
-    /**
-     * 正则搜索文件名中的拓展名
-     * @param $fileName
-     * @return mixed
-     */
-    static private function getExtend($fileName){
-        $array  = [];
-        preg_match('/(?<=\.)[a-zA-Z]+$/',$fileName,$array);
-        return $array[0];//蜜汁自信，匹配出来一定只有一个结果
-    }
 }

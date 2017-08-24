@@ -10,7 +10,7 @@ use App\AdminModel\sybj\Dynam;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class sybj extends Controller
+class Sybj extends Controller
 {
     private $viewPage;
 

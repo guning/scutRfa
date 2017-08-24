@@ -10,8 +10,26 @@ class WXMes extends Model
     public $timestamps = false;
 
     //
-    public function selectNeed(){
-        return $this->select('intro', 'introimgpath', 'activity', 'actimgpathf', 'actimgpaths')->first();
+    public function selectNeed($mode = 0){
+        $res = $this->select('intro', 'introimgpath', 'activity', 'actimgpathf', 'actimgpaths')->first();
+        if ($mode == 1) {
+            if (!is_null($res)) {
+                $data['introduce'] = $res->intro;
+                $data['introImg'] = $res->introimgpath;
+                $data['activity'] = $res->activity;
+                $data['activityImg1'] = $res->actimgpathf;
+                $data['activityImg2'] = $res->actimgpaths;
+            } else {
+                $data['introduce'] = '';
+                $data['introImg'] = '';
+                $data['activity'] = '';
+                $data['activityImg1'] = '';
+                $data['activityImg2'] = '';
+            }
+        } else {
+            $data = $res;
+        }
+        return $data;
     }
 
     public function updateData($updatedata){

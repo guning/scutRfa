@@ -100,7 +100,10 @@
                         <tbody>
                             <tr>
                                 <th><p class="text-info">huodong</p></th>
-                                <th><button type="button" class="btn btn-default" onclick="deleteEle(this)">删除</button></th>
+                                <th>
+                                    <button type="button" class="btn btn-default" onclick="deleteEle(this)">删除</button>
+                                    <button type="button" class="btn btn-default" onclick="changeStatus(this)">status</button>
+                                </th>
                             </tr>
                         </tbody>
                     </table>

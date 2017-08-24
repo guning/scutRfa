@@ -10,8 +10,30 @@ class WXTec extends Model
     public $timestamps = false;
 
     //
-    public function selectNeed(){
-        return $this->select('id', 'group', 'intro', 'imgpathf', 'imgpaths', 'imgpatht')->get();
+    public function selectNeed($mode = 0){
+        $res = $this->select('id', 'group', 'intro', 'imgpathf', 'imgpaths', 'imgpatht')->get();
+        if ($mode == 1) {
+            if (is_null($res->first())) {
+                $data[0]['id'] = '';
+                $data[0]['group'] = '';
+                $data[0]['intro'] = '';
+                $data[0]['img1'] = '';
+                $data[0]['img2'] = '';
+                $data[0]['img3'] = '';
+            } else {
+                foreach ($res as $r) {
+                    $data[]['id'] = $r->id;
+                    $data[]['group'] = $r->group;
+                    $data[]['intro'] = $r->intro;
+                    $data[]['img1'] = $r->imgpathf;
+                    $data[]['img2'] = $r->imgpaths;
+                    $data[]['img3'] = $r->imgpatht;
+                }
+            }
+        } else {
+            $data = $res;
+        }
+        return $data;
     }
 
     public function updateData($data){

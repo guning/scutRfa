@@ -10,7 +10,7 @@ use App\AdminModel\xhgk\WXTec;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class xhgk extends Controller
+class Xhgk extends Controller
 {
     private $viewPage;
 

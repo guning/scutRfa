@@ -36,7 +36,7 @@ class Article extends Controller{
             //如果要存到public目录下，这个public一定不能加，what the mother fucker?
             Image::make($image)->resize(300, 200)->save('img/surfacePlot/'.$tempFileName);
         }catch(\Exception $e){
-            $response->status = 'fail';
+            $response->status = 'failed';
             return json_encode($response);
         }
 

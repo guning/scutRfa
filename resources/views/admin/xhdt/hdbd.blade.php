@@ -4,7 +4,7 @@
 
 @section('content')
 
-@include('UEditor::head');
+@include('UEditor::head')
 
     <div>
         <form action="">
