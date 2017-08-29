@@ -12,49 +12,27 @@
 */
 use Illuminate\Support\Facades\Route;
 
-
-//use Illuminate\Http\Request;
-
-
 Route::post('competition/sign-up', 'Competition@register');
 
 Route::get('competition/sign-up', function () {
     return view('index');
 });
-Route::group(['prefix' => 'api'], function () {
-    Route::get('competition/sign-up', function () {
-        return view('index');
-    });
-});
 
 
 Route::get('competition/export', 'Competition@export');
 
-Route::group(['prefix' => 'api'], function () {
+Route::group(['prefix' => 'api', 'namespace' => 'customer'], function () {
 
-    Route::group(['prefix' => 'feedback', 'middleware' => 'Auth'], function () {
+    /*Route::group(['prefix' => 'feedback', 'middleware' => 'Auth'], function () {
         Route::get('feedback/get', 'Feedback@scan');
         Route::post('feedback/submit', 'Feedback@handIn');
-    });
+    });*/
 
-    //Route::get('activity/preview', 'Activity@preview');
     Route::group(['prefix' => 'activity'], function () {
-        Route::get('preview', 'Activity@preview');
-        Route::post('uploadPoster', [
-            'middleware' => ['Admin', 'uploadPoster'],
-            'uses' => 'Activity@uploadPoster'
-        ]);
-        Route::post('release', [
-            'middleware' => ['Admin', 'release'],
-            'uses' => 'Activity@release'
-        ]);
-        Route::post('modify', [
-            'middleware' => ['Admin', 'modify'],
-            'uses' => 'Activity@modify'
-        ]);
+        Route::get('active', 'Activity@active');
     });
 
-    Route::group(['prefix' => 'user'], function () {
+    /*Route::group(['prefix' => 'user'], function () {
         Route::get('getUserInfo', [
             'middleware' => 'Auth',
             'uses' => 'UserInfo@common'
@@ -66,7 +44,6 @@ Route::group(['prefix' => 'api'], function () {
         Route::get('authorize', 'Authorize@login');
         Route::get('authorizeSuccess', 'Authorize@authorizeSuccess');
     });
-    /*
     Route::get('user/getUserInfo', 'UserInfo@common');
 
     Route::get('user/avantar', 'UserInfo@getAvantar');
@@ -74,14 +51,14 @@ Route::group(['prefix' => 'api'], function () {
     Route::get('user/authorize', 'Authorize@login');
 
     Route::get('user/authorizeSuccess', 'Authorize@authorizeSuccess');
-    */
+
     Route::get('test', 'Authorize@test');
 
     Route::get('response/verify-identity-fail', 'ResponseRedirect@verifyIdentityFail');
 
     Route::get('response/lack-authority', 'ResponseRedirect@lackAuthority');
 
-    Route::get('response/fail', 'ResponseRedirect@fail');
+    Route::get('response/fail', 'ResponseRedirect@fail');*/
 
     Route::group(['prefix' => 'article'], function () {
         Route::post('uploadHtml', [
@@ -113,7 +90,7 @@ Route::group(['prefix' => 'api'], function () {
      * 请求示例：webroot/api/about
      * $page取值：association/director/department/technical
      */
-    Route::group(['prefix' => 'about', 'namespace' => 'customer'], function () {
+    Route::group(['prefix' => 'about'], function () {
         Route::get('/association', 'About@association');
         Route::get('/director', 'About@director');
         Route::get('/department', 'About@department');
@@ -132,7 +109,7 @@ Route::group(['prefix' => 'api'], function () {
 });
 
 Route::group(['namespace' => 'common'], function () {
-    Route::post('common/upload', 'UploadFile@uploadImg');
+    Route::post('upload', 'UploadFile@uploadImg');
 });
 
 //！！！等待加入中间件！！！
@@ -161,33 +138,6 @@ Route::group(['prefix' => 'admin', 'namespace' => 'admin'], function () {
 
 
 Route::get('/', function () {
-    return view('admin/xhdt/jqhd');
+    return view('admin/xhdt/allJqhd');
 });
-/*Route::post('/', function(Request $request){
-    return $request->input('schedule');
-=======
-Route::any('',function(){
-//    $response = new \stdClass();
-//    $response->title = '标题';
-//    $response->content = '内容';
-//
-//    $schedule1 = new \stdClass();
-//    $schedule1->stage = '开始';
-//    $schedule1->beginTime = 3543453;
-//    $schedule1->endTime = 1400000;
-//    $schedule1->place = '沙发上';
-//    $schedule2 = new \stdClass();
-//    $schedule2->stage = '结束';
-//    $schedule2->beginTime = 14000000;
-//    $schedule2->endTime = 324234243;
-//    $schedule2->place = '速度';
-//    $response->schedule = [
-//        $schedule1,
-//        $schedule2
-//    ];
-//    $response->signUpLink = false;
-//    $response->poster = 'pending-2017-05-11-11-35-40-59144c8c923ec';
-//    return json_encode($response);
-//    return view('admin/test');
 
-});*/
