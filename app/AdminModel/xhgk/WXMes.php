@@ -17,19 +17,17 @@ class WXMes extends Model
             if (!is_null($res)) {
                 $text = array(
                     array(
-                        array(
-                            'title' => 'intro',
-                            'content' => $res->intro
-                        ),
-                        array(
-                            'title' => 'activity',
-                            'content'=> $res->activity
-                        )
+                        'title' => 'intro',
+                        'content' => $res->intro
+                    ),
+                    array(
+                        'title' => 'activity',
+                        'content' => $res->activity
                     )
                 );
                 $img = array(
                     array(
-                        'image'=> $res->introimgpath,
+                        'image' => $res->introimgpath,
                     ),
                     array(
                         'image' => $res->actimgpathf,
@@ -38,6 +36,8 @@ class WXMes extends Model
                         'image' => $res->actimgpaths
                     )
                 );
+                $data['leftcontent'] = $text;
+                $data['rightcontent'] = $img;
             } else {
                 $data['introduce'] = '';
                 $data['introImg'] = '';
