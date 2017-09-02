@@ -100,11 +100,11 @@ Route::group(['prefix' => 'api', 'namespace' => 'customer'], function () {
      * 首页请求路由
      * 请求示例：webroot/api/caro
      */
-    /*Route::group(['prefix' => 'home', 'namespace' => 'customer'], function(){
-        Route::get('caro', 'home@caro');
-        Route::get('dynamic', 'home@dynamic');
+    Route::group(['prefix' => 'home'], function(){
+        Route::get('caro', 'Home@caro');
+        Route::get('dynamic', 'Home@dynamic');
         //Route::get('tecshare', 'home@tecShare');//未建表，未完成模块，暂留
-    });*/
+    });
 
 });
 

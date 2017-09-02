@@ -38,8 +38,6 @@ class WXMes extends Model
                         'image' => $res->actimgpaths
                     )
                 );
-                $data['leftcontent'] = $text;
-                $data['rightcontent'] = $img;
             } else {
                 $data['introduce'] = '';
                 $data['introImg'] = '';
