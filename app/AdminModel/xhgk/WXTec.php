@@ -24,7 +24,7 @@ class WXTec extends Model
                 foreach ($res as $r) {
                     $data[] = array(
                         'id' => $r->id,
-                        'department' => $r->group,
+                        'group' => $r->group,
                         'intro' => $r->intro,
                         'image' => array(
                             $r->imgpathf,

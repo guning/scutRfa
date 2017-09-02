@@ -29,7 +29,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'customer'], function () {
     });*/
 
     Route::group(['prefix' => 'activity'], function () {
-        Route::get('active', 'Activity@active');
+        Route::get('active', 'Activity@tmpDataActive');
+        Route::get('collect', 'Activity@tmpCollection');
     });
 
     /*Route::group(['prefix' => 'user'], function () {
@@ -101,8 +102,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'customer'], function () {
      * 请求示例：webroot/api/caro
      */
     Route::group(['prefix' => 'home'], function(){
-        Route::get('caro', 'Home@caro');
-        Route::get('dynamic', 'Home@dynamic');
+        Route::get('caro', 'Home@tmpCaro');
+        Route::get('dynamic', 'Home@tmpDynamic');
         //Route::get('tecshare', 'home@tecShare');//未建表，未完成模块，暂留
     });
 
