@@ -32,7 +32,6 @@ function sendData(){
         processData : false,
         contentType : false,
         success : function(data){
-            console.log(data);
             if(data.state == true){
                 location.reload(true);
             }else{

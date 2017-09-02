@@ -109,7 +109,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'customer'], function () {
 });
 
 Route::group(['namespace' => 'common'], function () {
-    Route::post('upload', 'UploadFile@uploadImg');
+    Route::post('common/upload', 'UploadFile@uploadImg');
 });
 
 //！！！等待加入中间件！！！
@@ -130,8 +130,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'admin'], function () {
     });
 
     Route::group(['prefix' => 'xhdt'], function () {
-        Route::get('{page}', 'Xhdt@show');
-        Route::post('{page}/up', 'Xhdt@update');
+        Route::get('actlist', 'Xhdt@actList');
+        Route::get('changeActStatus', 'Xhdt@changeActStatus');
+        Route::get('activity/{id}', 'Xhdt@actDetail');
+        Route::post('activity/up', 'Xhdt@actUpdate');
     });
     //Route::any('/ueditor','UeditorCtl@index');
 });

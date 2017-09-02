@@ -10,6 +10,9 @@ function uploadfile(thisfile){
     this.formdata = new FormData();
 
     var deal = function(){
+        if (this.file == null) {
+            return;
+        }
         if (this.re.test(this.file.type)){
             this.formdata.append('pic', this.file);
             //this.formdata.append('page', this.id);
@@ -27,10 +30,10 @@ function uploadfile(thisfile){
             processData: false,
             contentType: false,
             success : function(data){
-                //console.log(data);
+                console.log(data);
                 switch (data.state){
                     case 'success':
-                        $(thisfile).next().val(data.picPath);
+                        $(thisfile).next().attr('value', data.picPath);
                         alert('upload file success');
                         break;
                     case 'fail':

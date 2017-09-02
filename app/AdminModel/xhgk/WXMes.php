@@ -14,11 +14,13 @@ class WXMes extends Model
         $res = $this->select('intro', 'introimgpath', 'activity', 'actimgpathf', 'actimgpaths')->first();
         if ($mode == 1) {
             if (!is_null($res)) {
-                $data['introduce'] = $res->intro;
-                $data['introImg'] = $res->introimgpath;
-                $data['activity'] = $res->activity;
-                $data['activityImg1'] = $res->actimgpathf;
-                $data['activityImg2'] = $res->actimgpaths;
+                $text = array('intro' => $res->intro, 'activity' => $res->activity);
+                $img = array('intro' => $res->introimgpath,
+                    'activity1' => $res->actimgpathf,
+                    'activity2' => $res->actimgpaths
+                );
+                $data['leftcontent'] = $text;
+                $data['rightcontent'] = $img;
             } else {
                 $data['introduce'] = '';
                 $data['introImg'] = '';
@@ -35,8 +37,8 @@ class WXMes extends Model
     public function updateData($updatedata){
         $result = $this->first();
         $data['intro'] = $updatedata['intro'];
-        $data['introimgpath'] = $updatedata['intro'];
         $data['activity'] = $updatedata['activity'];
+        $data['introimgpath'] = $updatedata['introimgpath'];
         $data['actimgpathf'] = $updatedata['actimgpathf'];
         $data['actimgpaths'] = $updatedata['actimgpaths'];
         $data['update_time'] = time();

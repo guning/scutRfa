@@ -11,58 +11,37 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\AdminModel\xhdt\Activity;
 
-class Xhdt extends Controller {
-    private $viewPage;
+class Xhdt extends Controller
+{
 
-    private function getModelName($page){
-        switch($page){
-            case 'actlist' :
-                $result['model'] = new Activity();
-                $result['state'] = true;
-                $this->viewPage = 'admin/xhdt/allJqhd';
-                break;
-            default:
-                $result['state'] = false;
-        }
-        return $result;
+    public function actList()
+    {
+        $mymodel = new Activity();
+        $result = $mymodel->getList();
+        return view('admin/xhdt/allJqhd', ['results' => $result]);
     }
-
-    public function show($page){
-        $getResult = $this->getModelName($page);
-        //return $getResult;
-        if($getResult['state']){
-            $mymodel = $getResult['model'];
-            $result = $mymodel->getList();
-            return view($this->viewPage, ['results' => $result]);
-        }else{
-            abort(404);
-        }
+    public function changeActStatus(){
 
     }
 
-    public function update(Request $request, $page){
-        $getResult = $this->getModelName($page);
-        if($getResult['state']){
-            $mymodel = $getResult['model'];
-            $data['state'] = $mymodel->updateData($request->all());
-            return $data;
-        }else{
-            abort(404);
+    public function actUpdate(Request $request)
+    {
+        $mymodel = new Activity();
+        if ($mymodel->updateData($request->all()) >= 1) {
+            $data['state'] = true;
+        } else {
+            $data['state'] = false;
         }
+        return $data;
     }
 
-    public function del(Request $request, $page){
-        $getResult = $this->getModelName($page);
-        if($getResult['state']) {
-            $mymodel = $getResult['model'];
-            if ($mymodel->delData($request->input('id')) >= 1) {
-                $data['state'] = true;
-            } else {
-                $data['state'] = false;
-            }
-            return $data;
-        }else{
-            abort(404);
+    public function del(Request $request)
+    {
+        $mymodel = new Activity();
+        if ($mymodel->delData($request->input('id')) >= 1) {
+            $data['state'] = true;
+        } else {
+            $data['state'] = false;
         }
     }
 }

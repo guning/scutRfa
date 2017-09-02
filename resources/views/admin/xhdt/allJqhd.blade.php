@@ -57,7 +57,9 @@
     }
     function changeStatus(status) {
         var actId = $(status).parent().parent().find("input").attr("value");
+        var formdata = new FormData();
         if ($(status).hasClass('btn-warning')) {
+            newAjax(0, window.location.host + '/admin/xhdt/changeActStatus/' + actId, '', ajaxDeal);
             $(status).removeClass('btn-warning');
             $(status).addClass('btn-success');
             $(status).html('进行中');
