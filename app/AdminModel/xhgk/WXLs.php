@@ -23,10 +23,10 @@ class WXLs extends Model
                 foreach ($res as $r) {
                     $data[] = array(
                         'id' => $r->id,
-                        'image' => $this->imgpath,
-                        'position' => $this->position,
-                        'name' => $this->name,
-                        'wish' => $this->wish
+                        'image' => $r->imgpath,
+                        'position' => $r->position,
+                        'name' => $r->name,
+                        'wish' => $r->wish
                     );
                 }
             }
