@@ -10,14 +10,33 @@ class WXMes extends Model
     public $timestamps = false;
 
     //
-    public function selectNeed($mode = 0){
+    public function selectNeed($mode = 0)
+    {
         $res = $this->select('intro', 'introimgpath', 'activity', 'actimgpathf', 'actimgpaths')->first();
         if ($mode == 1) {
             if (!is_null($res)) {
-                $text = array('intro' => $res->intro, 'activity' => $res->activity);
-                $img = array('intro' => $res->introimgpath,
-                    'activity1' => $res->actimgpathf,
-                    'activity2' => $res->actimgpaths
+                $text = array(
+                    array(
+                        array(
+                            'title' => 'intro',
+                            'content' => $res->intro
+                        ),
+                        array(
+                            'title' => 'activity',
+                            'content'=> $res->activity
+                        )
+                    )
+                );
+                $img = array(
+                    array(
+                        'image'=> $res->introimgpath,
+                    ),
+                    array(
+                        'image' => $res->actimgpathf,
+                    ),
+                    array(
+                        'image' => $res->actimgpaths
+                    )
                 );
                 $data['leftcontent'] = $text;
                 $data['rightcontent'] = $img;
@@ -34,7 +53,8 @@ class WXMes extends Model
         return $data;
     }
 
-    public function updateData($updatedata){
+    public function updateData($updatedata)
+    {
         $result = $this->first();
         $data['intro'] = $updatedata['intro'];
         $data['activity'] = $updatedata['activity'];
@@ -43,9 +63,9 @@ class WXMes extends Model
         $data['actimgpaths'] = $updatedata['actimgpaths'];
         $data['update_time'] = time();
 
-        if (!isset($result->id)){
+        if (!isset($result->id)) {
             $this->insert($data);
-        }else{
+        } else {
             $this->where('id', $result->id)->update($data);
         }
         return true;

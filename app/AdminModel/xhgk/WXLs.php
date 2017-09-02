@@ -21,11 +21,13 @@ class WXLs extends Model
                 $data[0]['img'] = '';
             }else {
                 foreach ($res as $r) {
-                    $data[]['id'] = $r->id;
-                    $data[]['position'] = $r->position;
-                    $data[]['name'] = $r->name;
-                    $data[]['wish'] = $r->wish;
-                    $data[]['img'] = $r->imgpath;
+                    $data[] = array(
+                        'id' => $r->id,
+                        'image' => $this->imgpath,
+                        'position' => $this->position,
+                        'name' => $this->name,
+                        'wish' => $this->wish
+                    );
                 }
             }
         } else {

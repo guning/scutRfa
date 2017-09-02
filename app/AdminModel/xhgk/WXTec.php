@@ -22,12 +22,16 @@ class WXTec extends Model
                 $data[0]['img3'] = '';
             } else {
                 foreach ($res as $r) {
-                    $data[]['id'] = $r->id;
-                    $data[]['group'] = $r->group;
-                    $data[]['intro'] = $r->intro;
-                    $data[]['img1'] = $r->imgpathf;
-                    $data[]['img2'] = $r->imgpaths;
-                    $data[]['img3'] = $r->imgpatht;
+                    $data[] = array(
+                        'id' => $r->id,
+                        'department' => $r->group,
+                        'intro' => $r->intro,
+                        'image' => array(
+                            $r->imgpathf,
+                            $r->imgpaths,
+                            $r->imgpatht
+                        )
+                    );
                 }
             }
         } else {
