@@ -17,11 +17,11 @@ class WXMes extends Model
             if (!is_null($res)) {
                 $text = array(
                     array(
-                        'title' => 'intro',
+                        'title' => '协会简介',
                         'content' => $res->intro
                     ),
                     array(
-                        'title' => 'activity',
+                        'title' => '品牌活动',
                         'content' => $res->activity
                     )
                 );

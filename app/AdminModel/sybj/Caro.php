@@ -13,6 +13,30 @@ class Caro extends Model
     public function selectNeed(){
         return $this->select('id', 'imgpath', 'imgmes', 'imgtype', 'acturl')->get();
     }
+    public function getApiData(){
+        $res = $this->select('id', 'imgpath', 'imgmes', 'imgtype', 'acturl')->get();
+        $data = array();
+        if (is_null($res->first())) {
+            $data[] = array(
+                'id' => '',
+                'title' => '',
+                'content' => '',
+                'image' => '',
+                'url' => ''
+            );
+            return $data;
+        }
+        foreach ($res as $r) {
+            $data[] = array(
+                'id' => $r->id,
+                'title' => $r->imgtype,
+                'content' => $r->imgmes,
+                'image' => $r->imgpath,
+                'url' => $r->acturl
+            );
+        }
+        return $data;
+    }
 
     public function updateData($data){
         $requestdata = $data;

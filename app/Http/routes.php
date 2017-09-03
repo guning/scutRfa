@@ -102,8 +102,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'customer'], function () {
      * 请求示例：webroot/api/caro
      */
     Route::group(['prefix' => 'home'], function(){
-        Route::get('caro', 'Home@tmpCaro');
-        Route::get('dynamic', 'Home@tmpDynamic');
+        Route::get('caro', 'Home@caro');
+        Route::get('dynamic', 'Home@dynamic');
         //Route::get('tecshare', 'home@tecShare');//未建表，未完成模块，暂留
     });
 
@@ -128,6 +128,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'admin'], function () {
     Route::group(['prefix' => 'sybj'], function () {
         Route::get('{page}', 'Sybj@show');
         Route::post('{page}/up', 'Sybj@update');
+        Route::post('{page}/del', 'Sybj@del');
     });
 
     Route::group(['prefix' => 'xhdt'], function () {

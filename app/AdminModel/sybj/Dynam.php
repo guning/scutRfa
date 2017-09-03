@@ -14,6 +14,31 @@ class Dynam extends Model
         return $this->select('id', 'imgpath', 'title', 'summary', 'acturl')->get();
     }
 
+    public function getApiData(){
+        $res = $this->select('id', 'imgpath', 'title', 'summary', 'acturl')->get();
+        $data = array();
+        if (is_null($res->first())) {
+            $data[] = array(
+                'id' => '',
+                'title' => '',
+                'abstract' => '',
+                'image' => '',
+                'url' => ''
+            );
+            return $data;
+        }
+        foreach ($res as $r) {
+            $data[] = array(
+                'id' => $r->id,
+                'title' => $r->title,
+                'abstract' => $r->summary,
+                'image' => $r->imgpath,
+                'url' => $r->acturl
+            );
+        }
+        return $data;
+    }
+
     public function updateData($data){
         $requestdata = $data;
         foreach($requestdata as $key => $value){
@@ -36,5 +61,9 @@ class Dynam extends Model
         }
 
         return true;
+    }
+
+    public function delData($id){
+        return $this->where('id', '=', $id)->delete();
     }
 }

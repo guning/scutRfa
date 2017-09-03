@@ -54,4 +54,18 @@ class Sybj extends Controller
             abort(404);
         }
     }
+    public function del(Request $request, $page){
+        $getResult = $this->getModelName($page);
+        if($getResult['state']) {
+            $mymodel = $getResult['model'];
+            if ($mymodel->delData($request->input('id')) >= 1) {
+                $data['state'] = true;
+            } else {
+                $data['state'] = false;
+            }
+            return $data;
+        }else{
+            abort(404);
+        }
+    }
 }
