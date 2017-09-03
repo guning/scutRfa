@@ -24,7 +24,7 @@
                                         <input style="display: none" value="{{$result['id']}}"/>
                                     </th>
                                     <th>
-                                        <button type="button" class="btn btn-default" onclick="deleteEle(this)">删除
+                                        <button type="button" class="btn btn-default" onclick="rmEle(this)">删除
                                         </button>
                                         @if($result['status'] == 1)
                                             <button type="button" class="btn btn-success" onclick="changeStatus(this)">
@@ -51,33 +51,46 @@
     </div>
 
     <script type="text/javascript">
-        function addway(btn) {
-            var nexthtml = '';
-            $("#addway").append(nexthtml);
-        }
-        function addschedule(btn) {
-            var nexthtml = '<tr> <th><input type="text" name="stage[]"/></th> <th><input type="text" name="beginTime[]"/></th> <th><input type="text" name="endTime[]"/></th> <th><input type="text" name="place[]"/></th> <th><button type="button" class="btn btn-default" onclick="rmEle(this)">删除</button></th> </tr>';
-            $("#addschedule").append(nexthtml);
-        }
         function rmEle(btn) {
-            $(btn).parent().parent().remove();
+            var ajaxDel = function(rawData){
+                var data = JSON.parse(rawData)
+                if (data.state) {
+                    $(btn).parent().parent().remove();
+                } else {
+                    alert('request failed!');
+                }
+            };
+            var id = $(btn).parent().prev().children('input').val();
+            var formdata = new FormData();
+            formdata.append('id', id);
+            newAjax(1, 'delAct', formdata, ajaxDel);
         }
         function changeStatus(status) {
             var actId = $(status).parent().parent().find("input").attr("value");
+            var statusNum = -1;
+            var ajaxChange = function(responseText){
+                //先放着你们补，或者删改
+                console.log(responseText);
+            };
             if ($(status).hasClass('btn-warning')) {
-                newAjax(0, window.location.host + '/admin/xhdt/changeActStatus/' + actId, '', ajaxDeal);
+                statusNum = 0;
+                newAjax(0, 'changeActStatus/' + actId + '/' + statusNum, '', ajaxChange);
                 $(status).removeClass('btn-warning');
                 $(status).addClass('btn-success');
                 $(status).html('进行中');
                 return;
             }
             if ($(status).hasClass('btn-success')) {
+                statusNum = 1;
+                newAjax(0, 'changeActStatus/' + actId + '/' + statusNum, '', ajaxChange);
                 $(status).removeClass('btn-success');
                 $(status).addClass('btn-danger');
                 $(status).html('已结束');
                 return;
             }
             if ($(status).hasClass('btn-danger')) {
+                statusNum = 2;
+                newAjax(0, 'changeActStatus/' + actId + '/' + statusNum, '', ajaxChange);
                 $(status).removeClass('btn-danger');
                 $(status).addClass('btn-warning');
                 $(status).html('未开始');

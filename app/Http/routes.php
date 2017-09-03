@@ -29,8 +29,9 @@ Route::group(['prefix' => 'api', 'namespace' => 'customer'], function () {
     });*/
 
     Route::group(['prefix' => 'activity'], function () {
-        Route::get('active', 'Activity@tmpDataActive');
-        Route::get('collect', 'Activity@tmpCollection');
+        Route::get('active', 'Activity@active');
+        Route::get('collect', 'Activity@collection');
+        Route::get('report', 'Activity@report');
     });
 
     /*Route::group(['prefix' => 'user'], function () {
@@ -132,10 +133,21 @@ Route::group(['prefix' => 'admin', 'namespace' => 'admin'], function () {
     });
 
     Route::group(['prefix' => 'xhdt'], function () {
-        Route::get('actlist', 'Xhdt@actList');
-        Route::get('changeActStatus', 'Xhdt@changeActStatus');
-        Route::get('activity/{id}', 'Xhdt@actDetail');
-        Route::post('activity/up', 'Xhdt@actUpdate');
+        Route::group(['prefix' => 'activity'], function() {
+            Route::get('jqhd', 'Xhdt@actList');
+            Route::get('changeActStatus/{id}/{status}', 'Xhdt@changeActStatus');
+            Route::post('delAct', 'Xhdt@del');
+
+            Route::get('new', 'Xhdt@newAct');
+            Route::get('modify', 'Xhdt@modifyAct');
+
+            Route::post('up', 'Xhdt@actUpdate');
+            Route::get('{id}', 'Xhdt@actDetail');
+        });
+
+        Route::group(['prefix' => 'report'], function(){
+            Route::get('test','test@test');
+        });
     });
     //Route::any('/ueditor','UeditorCtl@index');
 });

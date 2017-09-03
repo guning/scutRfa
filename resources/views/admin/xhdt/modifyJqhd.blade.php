@@ -10,17 +10,17 @@
                 <tr>
                     <th>活动名称</th>
                     <th>
-                        <input type="text" name="title"/>
+                        <input type="text" name="title" value="{{$result['title']}}"/>
                         <div>
                             <button type="button" class="btn btn-default" onclick="$(this).next().click();">上传海报</button>
                             <input type="file" accept="image/*" onchange="uploadfile(this)" style="display: none"/>
-                            <input style="display: none" name="poster" value=""/>
+                            <input style="display: none" name="poster" value="{{$result['poster']}}"/>
                         </div>
                     </th>
                 </tr>
                 <tr>
                     <th>活动介绍</th>
-                    <th><textarea name="content" rows="7"></textarea></th>
+                    <th><textarea name="content" rows="7">{{$result['abstract']}}}</textarea></th>
                 </tr>
             </form>
             <form id="schedule">
@@ -38,13 +38,17 @@
                             </tr>
                             </thead>
                             <tbody id="addschedule">
+                            @foreach ($result['schedule'] as $s)
                             <tr>
-                                <th><input type="text" name="stage[]"/></th>
-                                <th><input type="text" name="beginTime[]"/></th>
-                                <th><input type="text" name="endTime[]"/></th>
-                                <th><input type="text" name="place[]"/></th>
-                                <th><button type="button" class="btn btn-default" onclick="rmEle(this)">删除</button></th>
+                                    <th><input type="text" name="stage[]" value="{{$s['stage']}}"/></th>
+                                    <th><input type="text" name="beginTime[]" value="{{$s['begintime']}}"/></th>
+                                    <th><input type="text" name="endTime[]" value="{{$s['endtime']}}"/></th>
+                                    <th><input type="text" name="place[]" value="{{$s['place']}}"/></th>
+                                    <th>
+                                        <button type="button" class="btn btn-default" onclick="rmEle(this)">删除</button>
+                                    </th>
                             </tr>
+                            @endforeach
                             </tbody>
                         </table>
                         <button type="button" class="btn btn-default btn-add" id="schedule" onclick="addschedule(this)">添加</button>
@@ -60,17 +64,19 @@
                             <tr>
                                 <th>途径</th>
                                 <th>具体方法</th>
-                                <th>链接</th>
                                 <th></th>
                             </tr>
                             </thead>
                             <tbody id="addway">
-                            <tr>
-                                <th><input type="text" name=""/></th>
-                                <th><input type="text" name=""/></th>
-                                <th><input type="text" name=""/></th>
-                                <th><button type="button" class="btn btn-default" onclick="rmEle(this)">删除</button></th>
-                            </tr>
+                            @foreach ($result['way'] as $w)
+                                <tr>
+                                    <th><input type="text" name="wayname[]" value="{{$w['wayname']}}"/></th>
+                                    <th><input type="text" name="waycontent[]" value="{{$w['waycontent']}}"/></th>
+                                    <th>
+                                        <button type="button" class="btn btn-default" onclick="rmEle(this)">删除</button>
+                                    </th>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
                         <button type="button" class="btn btn-default btn-add" id="way" onclick="addway(this)">添加</button>

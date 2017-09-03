@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class Forilegium extends Seeder
+class Florilegium extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,6 +12,6 @@ class Forilegium extends Seeder
     public function run()
     {
         //
-        factory(App\Forilegium::class, 20)->create();
+        factory(App\AdminModel\xhdt\Florilegium::class, 30)->create();
     }
 }

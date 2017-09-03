@@ -20,10 +20,33 @@ class Xhdt extends Controller
         $result = $mymodel->getList();
         return view('admin/xhdt/allJqhd', ['results' => $result]);
     }
-    public function changeActStatus(){
-
+    public function changeActStatus($id,$status){
+        $mymodel = new Activity();
+        if ($mymodel->changeStatus($id, $status + 1) >= 1) {
+            $data['state'] = true;
+        } else {
+            $data['state'] = false;
+        }
     }
 
+    public function del(Request $request)
+    {
+        $mymodel = new Activity();
+        if ($mymodel->deleteData($request->input('id')) >= 1) {
+            $data['state'] = true;
+        } else {
+            $data['state'] = false;
+        }
+        return $data;
+    }
+
+    public function newAct()
+    {
+        $data = array(
+
+        );
+        return view('admin/xhdt/modifyJqhd', ['result', $data]);
+    }
     public function actUpdate(Request $request)
     {
         $mymodel = new Activity();
@@ -35,13 +58,4 @@ class Xhdt extends Controller
         return $data;
     }
 
-    public function del(Request $request)
-    {
-        $mymodel = new Activity();
-        if ($mymodel->delData($request->input('id')) >= 1) {
-            $data['state'] = true;
-        } else {
-            $data['state'] = false;
-        }
-    }
 }

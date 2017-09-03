@@ -9,6 +9,12 @@
  */
 function newAjax(type, url, data, successFun) {
     var xhr = new XMLHttpRequest();
+    var readyChange = function(){
+        if (xhr.readyState==4 && xhr.status==200) {
+            successFun(xhr.responseText);
+        }
+    }
+    xhr.onreadystatechange = readyChange;
     if(type == 1) {
         xhr.open("POST", url, true);
         xhr.send(data);
@@ -16,5 +22,5 @@ function newAjax(type, url, data, successFun) {
         xhr.open("GET", url, true);
         xhr.send();
     }
-    xhr.addEventListener('load', successFun(xhr.status));
+
 }

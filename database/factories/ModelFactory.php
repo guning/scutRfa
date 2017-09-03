@@ -11,7 +11,7 @@ $factory->define(App\Activity::class, function (Faker\Generator $faker) {
     return [
         'title' => $faker->word,
         'abstract' => $faker->word,
-        'schedule' => serialize($array),
+        'schedule' => json_encode($array),
         'sign_up_url' => $faker->url
     ];
 });
@@ -74,7 +74,7 @@ $factory->define(App\QQUser::class, function (Faker\Generator $faker) {
         'open_id' => $faker->word,
         'access_token' => $faker->word,
         'refresh_token' => $faker->word,
-        'user_info' => serialize($class)
+        'user_info' => json_encode($class)
     ];
 });
 

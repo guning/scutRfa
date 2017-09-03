@@ -25,12 +25,35 @@ class Activity extends Model {
         return $data;
     }
 
+    public function getApiData(){
+        $rawData = $this->select('id', 'title', 'abstract', 'schedule', 'way', 'poster')->where('status', '=', 1)->get();
+        $data = array();
+        foreach ($rawData as $r) {
+            $data[] = array(
+                'id' => $r->id,
+                'title' => $r->title,
+                'abstract' => $r->abstract,
+                'schedule' => json_decode($r->schedule, true),
+                'way' => json_decode($r->way, true),
+                'poster' => $r->poster
+            );
+        }
+        return $data;
+    }
+
     public function insertActivity($requestData){
         return $this->insert($requestData);
     }
 
     public function updateActivity($id, $newActivity){
         return $this->where('id', '=', $id)->update($newActivity);
+    }
+
+    public function changeStatus($id, $status){
+        if ($status >= 3 || $status < 0) {
+            $status = 0;
+        }
+        return $this->where('id', '=', $id)->update(array('status' => $status));
     }
 
     public function deleteData($id) {
