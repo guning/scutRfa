@@ -43,7 +43,20 @@ class Xhdt extends Controller
     public function newAct()
     {
         $data = array(
-
+            'id' => '',
+            'title' => '',
+            'abstract' => '',
+            'schedule' => array(
+                'stage' => '',
+                'beginTime' => '',
+                'endTime' => '',
+                'place' => ''
+            ),
+            'way' => array(
+                'wayname' => '',
+                'waycontent' => ''
+            ),
+            'poster' => ''
         );
         return view('admin/xhdt/modifyJqhd', ['result', $data]);
     }

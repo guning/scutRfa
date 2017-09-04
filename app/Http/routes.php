@@ -134,7 +134,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'admin'], function () {
 
     Route::group(['prefix' => 'xhdt'], function () {
         Route::group(['prefix' => 'activity'], function() {
-            Route::get('jqhd', 'Xhdt@actList');
+            Route::get('list', 'Xhdt@actList');
             Route::get('changeActStatus/{id}/{status}', 'Xhdt@changeActStatus');
             Route::post('delAct', 'Xhdt@del');
 
@@ -153,7 +153,4 @@ Route::group(['prefix' => 'admin', 'namespace' => 'admin'], function () {
 });
 
 
-Route::get('/', function () {
-    return view('admin/xhdt/allJqhd');
-});
 

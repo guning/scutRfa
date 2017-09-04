@@ -41,11 +41,11 @@
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="/admin/xhdt/jqhd">近期活动</a></li>
+                            <li><a href="/admin/xhdt/activity/list">近期活动</a></li>
                             <li class="divider"></li>
-                            <li><a href="/admin/xhdt/hdbd">活动报道</a></li>
+                            <li><a href="/admin/xhdt/report/list">活动报道</a></li>
                             <li class="divider"></li>
-                            <li><a href="/admin/xhdt/zpjj">作品集锦</a></li>
+                            <li><a href="/admin/xhdt/collection/list">作品集锦</a></li>
                         </ul>
                     </li>
                 </ul>

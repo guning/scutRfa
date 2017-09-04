@@ -20,7 +20,7 @@ class CreateActivity extends Migration
             $table->string('abstract', 150)->comment('活动的简介');
             $table->text('schedule')->comment('活动的时间表，json');
             $table->text('way')->comment('报名方式，json');
-            $table->int('status')->comment('活动状态，1表示正在进行，0表示未开始，2表示结束');
+            $table->integer('status')->comment('活动状态，1表示正在进行，0表示未开始，2表示结束');
         });
     }
 
