@@ -63,7 +63,7 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav">
-                    <li><a href="/admin/yjfk/yjfk">意见反馈</a></li>
+                    <li><a href="/admin/yjfk/list">意见反馈</a></li>
                 </ul>
                 <p class="navbar-text navbar-right">你好，管理员 text</p>
             </div>

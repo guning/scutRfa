@@ -7,6 +7,8 @@
  */
 namespace App\Http\Controllers\admin;
 
+use App\AdminModel\xhdt\Florilegium;
+use App\AdminModel\xhdt\Report;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\AdminModel\xhdt\Activity;
@@ -18,29 +20,39 @@ class Xhdt extends Controller
         switch ($page) {
             case 'activity' :
                 $data['model'] = new Activity();
-                $data['view'] = 'actlist';
+                $data['view'] = 'admin/xhdt/act';
+                break;
+            case 'report' :
+                $data['model'] = new Report();
+                $data['view'] = 'admin/xhdt/report';
+                break;
+            case 'report' :
+                $data['model'] = new Florilegium();
+                $data['view'] = 'admin/xhdt/collection';
+                break;
+            default:
+                abort(404);
                 break;
         }
-    }
-    public function qList($page)
-    {
-        $mymodel = new Activity();
-        $result = $mymodel->getList();
-        return view('admin/xhdt/allJqhd', ['results' => $result]);
-    }
-    public function changeActStatus($id,$status){
-        $mymodel = new Activity();
-        if ($mymodel->changeStatus($id, $status + 1) >= 1) {
-            $data['state'] = true;
-        } else {
-            $data['state'] = false;
-        }
+        return $data;
     }
 
-    public function del(Request $request)
+    /**
+     * qList:获取列表
+     * @author by 罟宁
+     * @param $page
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * createTime:
+     */
+    public function qList($page)
     {
-        $mymodel = new Activity();
-        if ($mymodel->deleteData($request->input('id')) >= 1) {
+        $res = $this->getModelView($page);
+        $result = $res['model']->getList();
+        return view($res['view'] . 'list', ['results' => $result]);
+    }
+    public function changeStatus($page,$id,$status){
+        $res = $this->getModelView($page);
+        if ($res['model']->changeStatus($id, $status + 1) >= 1) {
             $data['state'] = true;
         } else {
             $data['state'] = false;
@@ -48,30 +60,52 @@ class Xhdt extends Controller
         return $data;
     }
 
-    public function newAct()
+    public function del($page, Request $request)
     {
+        $res = $this->getModelView($page);
+        if ($res->deleteData($request->input('id')) >= 1) {
+            $data['state'] = true;
+        } else {
+            $data['state'] = false;
+        }
+        return $data;
+    }
+
+    public function newView($page)
+    {
+        $res = $this->getModelView($page);
         $data = array(
             'id' => '',
             'title' => '',
             'abstract' => '',
             'schedule' => array(
-                'stage' => '',
-                'beginTime' => '',
-                'endTime' => '',
-                'place' => ''
+                array(
+                    'stage' => '',
+                    'beginTime' => '',
+                    'endTime' => '',
+                    'place' => ''
+                ),
             ),
             'way' => array(
-                'wayname' => '',
-                'waycontent' => ''
+                array(
+                    'wayname' => '',
+                    'waycontent' => ''
+                ),
             ),
             'poster' => ''
         );
-        return view('admin/xhdt/modifyJqhd', ['result', $data]);
+        return view($res['view'] . 'modify', ['result' => $data]);
     }
-    public function actUpdate(Request $request)
+
+    public function modifyView($page, Request $request) {
+        $res = $this->getModelView($page);
+        $data = $res['model']->getModify($request->input('id'));
+        return view($res['view'] . 'modify', ['result' => $data]);
+    }
+    public function qUpdate($page, Request $request)
     {
-        $mymodel = new Activity();
-        if ($mymodel->updateData($request->all()) >= 1) {
+        $res = $this->getModelView($page);
+        if ($res['model']->updateData($request->all()) >= 1) {
             $data['state'] = true;
         } else {
             $data['state'] = false;

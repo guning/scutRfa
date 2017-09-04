@@ -10,6 +10,7 @@
                 <tr>
                     <th>活动名称</th>
                     <th>
+                        <input style="display: none" name="id" value="{{$result['id']}}"/>
                         <input type="text" name="title" value="{{$result['title']}}"/>
                         <div>
                             <button type="button" class="btn btn-default" onclick="$(this).next().click();">上传海报</button>
@@ -20,7 +21,7 @@
                 </tr>
                 <tr>
                     <th>活动介绍</th>
-                    <th><textarea name="content" rows="7">{{$result['abstract']}}}</textarea></th>
+                    <th><textarea name="content" rows="7">{{$result['abstract']}}</textarea></th>
                 </tr>
             </form>
             <form id="schedule">
@@ -41,8 +42,8 @@
                             @foreach ($result['schedule'] as $s)
                             <tr>
                                     <th><input type="text" name="stage[]" value="{{$s['stage']}}"/></th>
-                                    <th><input type="text" name="beginTime[]" value="{{$s['begintime']}}"/></th>
-                                    <th><input type="text" name="endTime[]" value="{{$s['endtime']}}"/></th>
+                                    <th><input type="text" name="beginTime[]" value="{{$s['beginTime']}}"/></th>
+                                    <th><input type="text" name="endTime[]" value="{{$s['endTime']}}"/></th>
                                     <th><input type="text" name="place[]" value="{{$s['place']}}"/></th>
                                     <th>
                                         <button type="button" class="btn btn-default" onclick="rmEle(this)">删除</button>

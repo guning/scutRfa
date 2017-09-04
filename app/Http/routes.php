@@ -140,7 +140,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'admin'], function () {
         Route::get('{page}/new', 'Xhdt@newView');
         Route::get('{page}/modify', 'Xhdt@modifyView');
 
-        Route::post('{page}/up', 'Xhdt@update');
+        Route::post('{page}/up', 'Xhdt@qUpdate');
     });
 
     Route::group(['prefix' => 'yjfk'], function(){

@@ -41,6 +41,10 @@ class Activity extends Model {
         return $data;
     }
 
+    public function getModify($id){
+
+    }
+
     public function insertActivity($requestData){
         return $this->insert($requestData);
     }
