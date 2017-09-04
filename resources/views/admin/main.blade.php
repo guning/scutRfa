@@ -78,7 +78,7 @@
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script src="{{asset('js/uploadfile.js')}}"></script>
 <script src="{{asset('js/deal.js')}}"></script>
-<script src="{{asset('js/newAJax.js')}}"></script>
+<script src="{{asset('js/newAjax.js')}}"></script>
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
