@@ -71,8 +71,8 @@
                             <tbody id="addway">
                             @foreach ($result['way'] as $w)
                                 <tr>
-                                    <th><input type="text" name="wayname[]" value="{{$w['wayname']}}"/></th>
-                                    <th><input type="text" name="waycontent[]" value="{{$w['waycontent']}}"/></th>
+                                    <th><input type="text" name="title[]" value="{{$w['title']}}"/></th>
+                                    <th><input type="text" name="content[]" value="{{$w['content']}}"/></th>
                                     <th>
                                         <button type="button" class="btn btn-default" onclick="rmEle(this)">删除</button>
                                     </th>

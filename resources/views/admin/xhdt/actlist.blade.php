@@ -16,7 +16,7 @@
                 @foreach($results as $result)
                     <tr>
                         <th>
-                            <p class="text-info">{{$result['title']}}</p>
+                            <a href="modify?id={{$result['id']}}"><p class="text-info">{{$result['title']}}</p></a>
                             <input style="display: none" value="{{$result['id']}}"/>
                         </th>
                         <th>

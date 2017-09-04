@@ -88,8 +88,8 @@ class Xhdt extends Controller
             ),
             'way' => array(
                 array(
-                    'wayname' => '',
-                    'waycontent' => ''
+                    'title' => '',
+                    'content' => ''
                 ),
             ),
             'poster' => ''

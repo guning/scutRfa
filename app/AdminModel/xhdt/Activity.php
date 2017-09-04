@@ -42,7 +42,16 @@ class Activity extends Model {
     }
 
     public function getModify($id){
-
+        $rawData = $this->select('id', 'title', 'abstract', 'schedule', 'way', 'poster')->where('id', '=', $id)->first();
+        $data = array(
+            'id' => $rawData->id,
+            'title' => $rawData->title,
+            'abstract' => $rawData->abstract,
+            'schedule' => json_decode($rawData->schedule, true),
+            'way' => json_decode($rawData->way, true),
+            'poster' => $rawData->poster
+        );
+        return $data;
     }
 
     public function insertActivity($requestData){
