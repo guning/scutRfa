@@ -13,8 +13,16 @@ use App\AdminModel\xhdt\Activity;
 
 class Xhdt extends Controller
 {
-
-    public function actList()
+    private function getModelView($page){
+        $data = array();
+        switch ($page) {
+            case 'activity' :
+                $data['model'] = new Activity();
+                $data['view'] = 'actlist';
+                break;
+        }
+    }
+    public function qList($page)
     {
         $mymodel = new Activity();
         $result = $mymodel->getList();

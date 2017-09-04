@@ -133,21 +133,22 @@ Route::group(['prefix' => 'admin', 'namespace' => 'admin'], function () {
     });
 
     Route::group(['prefix' => 'xhdt'], function () {
-        Route::group(['prefix' => 'activity'], function() {
-            Route::get('list', 'Xhdt@actList');
-            Route::get('changeActStatus/{id}/{status}', 'Xhdt@changeActStatus');
-            Route::post('delAct', 'Xhdt@del');
+        Route::get('{page}/list', 'Xhdt@qList');
+        Route::get('{page}/changeStatus/{id}/{status}', 'Xhdt@changeStatus');
+        Route::post('{page}/del', 'Xhdt@del');
 
-            Route::get('new', 'Xhdt@newAct');
-            Route::get('modify', 'Xhdt@modifyAct');
+        Route::get('{page}/new', 'Xhdt@newView');
+        Route::get('{page}/modify', 'Xhdt@modifyView');
 
-            Route::post('up', 'Xhdt@actUpdate');
-            Route::get('{id}', 'Xhdt@actDetail');
+        Route::post('{page}/up', 'Xhdt@update');
+    });
+
+    Route::group(['prefix' => 'yjfk'], function(){
+        Route::get('reply', function(){
+            abort(404);
         });
-
-        Route::group(['prefix' => 'report'], function(){
-            Route::get('test','test@test');
-        });
+        Route::get('list', 'Yjfk@qList');
+        Route::post('reply', 'Yjfk@reply');
     });
     //Route::any('/ueditor','UeditorCtl@index');
 });

@@ -50,6 +50,7 @@
         </table>
     </div>
 
+
     <script type="text/javascript">
         function rmEle(btn) {
             var ajaxDel = function(rawData){
@@ -63,7 +64,7 @@
             var id = $(btn).parent().prev().children('input').val();
             var formdata = new FormData();
             formdata.append('id', id);
-            newAjax(1, '/admin/xhdt/activity/delAct', formdata, ajaxDel);
+            newAjax(1, 'delAct', formdata, ajaxDel);
         }
         function changeStatus(status) {
             var actId = $(status).parent().parent().find("input").attr("value");
@@ -74,7 +75,7 @@
             };
             if ($(status).hasClass('btn-warning')) {
                 statusNum = 0;
-                newAjax(0, '/admin/xhdt/activity/changeActStatus/' + actId + '/' + statusNum, '', ajaxChange);
+                newAjax(0, 'changeActStatus/' + actId + '/' + statusNum, '', ajaxChange);
                 $(status).removeClass('btn-warning');
                 $(status).addClass('btn-success');
                 $(status).html('进行中');
@@ -82,7 +83,7 @@
             }
             if ($(status).hasClass('btn-success')) {
                 statusNum = 1;
-                newAjax(0, '/admin/xhdt/activity/changeActStatus/' + actId + '/' + statusNum, '', ajaxChange);
+                newAjax(0, 'changeActStatus/' + actId + '/' + statusNum, '', ajaxChange);
                 $(status).removeClass('btn-success');
                 $(status).addClass('btn-danger');
                 $(status).html('已结束');
@@ -90,7 +91,7 @@
             }
             if ($(status).hasClass('btn-danger')) {
                 statusNum = 2;
-                newAjax(0, '/admin/xhdt/activity/changeActStatus/' + actId + '/' + statusNum, '', ajaxChange);
+                newAjax(0, 'changeActStatus/' + actId + '/' + statusNum, '', ajaxChange);
                 $(status).removeClass('btn-danger');
                 $(status).addClass('btn-warning');
                 $(status).html('未开始');

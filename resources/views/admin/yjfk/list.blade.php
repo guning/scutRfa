@@ -16,21 +16,18 @@
                 </tr>
                 </thead>
                 <tbody>
+                @foreach($results as $r)
                 <tr>
-                    <th><p class="text-info">111</p></th>
-                    <th><p class="text-info">111</p></th>
-                    <th><p class="text-info">111</p></th>
-                    <th><p class="text-info">111</p></th>
+                    <th><p class="text-info">{{$r['user']}}</p></th>
+                    <th><p class="text-info">{{$r['question']}}</p></th>
+                    <th><p class="text-info">{{$r['time']}}</p></th>
+                    <th><p class="text-info">{{$r['status']}}</p></th>
                     <th><botton type="botton" class="btn btn-default">回复</botton></th>
                 </tr>
-
+                @endforeach
                 </tbody>
             </table>
             <br/>
-            <div>
-                <button type="button" class="btn btn-primary btn-submit">提交</button>
-                <button type="button" class="btn btn-primary btn-review">预览</button>
-            </div>
         </form>
     </div>
 @endsection
