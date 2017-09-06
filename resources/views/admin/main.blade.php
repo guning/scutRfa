@@ -41,7 +41,7 @@
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="/admin/xhdt/activity/list">近期活动</a></li>
+                            <li><a href="/admin/xhdt/act/list">近期活动</a></li>
                             <li class="divider"></li>
                             <li><a href="/admin/xhdt/report/list">活动报道</a></li>
                             <li class="divider"></li>

@@ -22,4 +22,29 @@ class Florilegium extends Model {
         $data['collection'] = $tmpData['data'];
         return $data;
     }
+
+    public function getList() {
+        $tableDatas = $this->select('id', 'title', 'abstract','imgPath')->get();
+        $data = array();
+        foreach ($tableDatas as $tableData) {
+            $tmp['id'] = $tableData['id'];
+            $tmp['title'] = $tableData['title'];
+            $tmp['abstract'] = $tableData['abstract'];
+            $tmp['imgPath'] = $tableData['imgPath'];
+            $data[] = $tmp;
+        }
+        return $data;
+    }
+
+    public function getModify($id){
+        $rawData = $this->select('id', 'title', 'imgPath', 'abstract')->where('id', '=', $id)->first();
+        $data = array(
+            'id' => $rawData->id,
+            'title' => $rawData->title,
+            'abstract' => $rawData->abstract,
+            'imgPath' => $rawData->imgPath
+        );
+        return $data;
+    }
 }
+

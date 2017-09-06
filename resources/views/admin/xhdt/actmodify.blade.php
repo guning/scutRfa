@@ -1,12 +1,13 @@
 @extends('admin.main')
 
-@section('position', '协会动态 -> 近期活动')
+@section('position', '协会动态 -> 近期活动 -> 修改/新增活动')
 
 @section('content')
-    <div>
+    <form action="up" method="post">
+        <div>
         <table class="table">
             <tbody>
-            <form id="activitymes">
+            <div id="activitymes">
                 <tr>
                     <th>活动名称</th>
                     <th>
@@ -21,10 +22,10 @@
                 </tr>
                 <tr>
                     <th>活动介绍</th>
-                    <th><textarea name="content" rows="7">{{$result['abstract']}}</textarea></th>
+                    <th><textarea name="abstract" rows="7">{{$result['abstract']}}</textarea></th>
                 </tr>
-            </form>
-            <form id="schedule">
+            </div>
+            <div id="schedule">
                 <tr>
                     <th>活动日程表</th>
                     <th>
@@ -55,8 +56,8 @@
                         <button type="button" class="btn btn-default btn-add" id="schedule" onclick="addschedule(this)">添加</button>
                     </th>
                 </tr>
-            </form>
-            <form id="enrollway">
+            </div>
+            <div id="enrollway">
                 <tr>
                     <th>报名方式</th>
                     <th>
@@ -71,8 +72,8 @@
                             <tbody id="addway">
                             @foreach ($result['way'] as $w)
                                 <tr>
-                                    <th><input type="text" name="title[]" value="{{$w['title']}}"/></th>
-                                    <th><input type="text" name="content[]" value="{{$w['content']}}"/></th>
+                                    <th><input type="text" name="wayname[]" value="{{$w['wayname']}}"/></th>
+                                    <th><input type="text" name="waycontent[]" value="{{$w['waycontent']}}"/></th>
                                     <th>
                                         <button type="button" class="btn btn-default" onclick="rmEle(this)">删除</button>
                                     </th>
@@ -83,18 +84,19 @@
                         <button type="button" class="btn btn-default btn-add" id="way" onclick="addway(this)">添加</button>
                     </th>
                 </tr>
-            </form>
+            </div>
             </tbody>
         </table>
 
         <div>
-            <button type="button" class="btn btn-primary btn-submit">提交</button>
+            <input type="submit" class="btn btn-primary btn-submit" value="提交">
             {{--<button type="button" class="btn btn-primary btn-review">预览</button>--}}
         </div>
     </div>
+    </form>
     <script type="text/javascript">
         function addway(btn){
-            var nexthtml = '';
+            var nexthtml = '<tr><th><input type="text" name="title[]" value=""/></th><th><input type="text" name="content[]" value=""/></th><th><button type="button" class="btn btn-default" onclick="rmEle(this)">删除</button></th></tr>';
             $("#addway").append(nexthtml);
         }
         function addschedule(btn){

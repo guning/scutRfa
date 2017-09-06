@@ -18,7 +18,7 @@ class Xhdt extends Controller
     private function getModelView($page){
         $data = array();
         switch ($page) {
-            case 'activity' :
+            case 'act' :
                 $data['model'] = new Activity();
                 $data['view'] = 'admin/xhdt/act';
                 break;
@@ -26,7 +26,7 @@ class Xhdt extends Controller
                 $data['model'] = new Report();
                 $data['view'] = 'admin/xhdt/report';
                 break;
-            case 'report' :
+            case 'collection' :
                 $data['model'] = new Florilegium();
                 $data['view'] = 'admin/xhdt/collection';
                 break;
@@ -63,7 +63,7 @@ class Xhdt extends Controller
     public function del($page, Request $request)
     {
         $res = $this->getModelView($page);
-        if ($res->deleteData($request->input('id')) >= 1) {
+        if ($res['model']->deleteData($request->input('id')) >= 1) {
             $data['state'] = true;
         } else {
             $data['state'] = false;
@@ -74,43 +74,23 @@ class Xhdt extends Controller
     public function newView($page)
     {
         $res = $this->getModelView($page);
-        $data = array(
-            'id' => '',
-            'title' => '',
-            'abstract' => '',
-            'schedule' => array(
-                array(
-                    'stage' => '',
-                    'beginTime' => '',
-                    'endTime' => '',
-                    'place' => ''
-                ),
-            ),
-            'way' => array(
-                array(
-                    'title' => '',
-                    'content' => ''
-                ),
-            ),
-            'poster' => ''
-        );
+        $data = $res['model']->getNullData();
         return view($res['view'] . 'modify', ['result' => $data]);
     }
 
     public function modifyView($page, Request $request) {
         $res = $this->getModelView($page);
+        if (empty($request->input('id'))) {
+            return $this->newView($page);
+        }
         $data = $res['model']->getModify($request->input('id'));
         return view($res['view'] . 'modify', ['result' => $data]);
     }
     public function qUpdate($page, Request $request)
     {
         $res = $this->getModelView($page);
-        if ($res['model']->updateData($request->all()) >= 1) {
-            $data['state'] = true;
-        } else {
-            $data['state'] = false;
-        }
-        return $data;
+        $res['model']->updateData($request->all());
+        return $this->modifyView($page, $request);
     }
 
 }

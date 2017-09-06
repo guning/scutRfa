@@ -4,45 +4,37 @@
 
 @section('content')
     <div>
-        <form action="">
+        <form action="up" method="post">
             <table class="table">
-                <thead>
-                <tr>
-                    <th>作品名称</th>
-                    <th>作品简介</th>
-                    <th>图片</th>
-                    <th></th>
-                </tr>
-                </thead>
                 <tbody>
-                    <tr id="1" class="add">
-                        <th><input type="text" class="input-sm"/></th>
-                        <th><textarea rows="10"></textarea></th>
+                    <tr>
+                        <th>作品名称</th>
+                        <th>
+                            <input style="display: none" name="id" value="{{$result['id']}}"/>
+                            <input type="text" name="title" value="{{$result['title']}}" />
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>作品简介</th>
+                        <th>
+                            <textarea name="" id="" cols="30" rows="10">{{$result['abstract']}}</textarea>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>图片</th>
                         <th>
                             <div>
                                 <button type="button" class="btn btn-default" onclick="$(this).next().click();">上传图片</button>
                                 <input type="file" accept="image/*" onchange="uploadfile(this)" style="display: none"/>
+                                <input style="display: none" name="poster" value="{{$result['imgPath']}}"/>
                             </div>
                         </th>
-                        <th><button type="button" class="btn btn-default" onclick="deleteEle(this);">删除</button></th>
                     </tr>
                 </tbody>
             </table>
-            <br/>
-            <div>
-                <button type="button" class="btn btn-primary btn-submit">提交</button>
-                <button type="button" class="btn btn-primary btn-review">预览</button>
-                <button type="button" class="btn btn-primary btn-add" onclick="add();">增加作品</button>
-            </div>
+            <button type="button" class="btn btn-primary btn-submit">提交</button>
         </form>
     </div>
     <script type="text/javascript">
-        function add(){
-            var nexthtml = '';
-            $("tbody").append(nexthtml);
-        }
-        function deleteEle(btn){
-            $(btn).parent().parent().remove();
-        }
     </script>
 @endsection
