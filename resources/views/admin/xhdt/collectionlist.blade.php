@@ -49,38 +49,5 @@
             formdata.append('id', id);
             newAjax(1, 'del', formdata, ajaxDel);
         }
-        function changeStatus(status) {
-            var actId = $(status).parent().parent().find("input").attr("value");
-            var statusNum = -1;
-            var ajaxChange = function (responseText) {
-                //先放着你们补，或者删改
-                console.log(responseText);
-            };
-            if ($(status).hasClass('btn-warning')) {
-                statusNum = 0;
-                newAjax(0, 'changeStatus/' + actId + '/' + statusNum, '', ajaxChange);
-                $(status).removeClass('btn-warning');
-                $(status).addClass('btn-success');
-                $(status).html('进行中');
-                return;
-            }
-            if ($(status).hasClass('btn-success')) {
-                statusNum = 1;
-                newAjax(0, 'changeStatus/' + actId + '/' + statusNum, '', ajaxChange);
-                $(status).removeClass('btn-success');
-                $(status).addClass('btn-danger');
-                $(status).html('已结束');
-                return;
-            }
-            if ($(status).hasClass('btn-danger')) {
-                statusNum = 2;
-                newAjax(0, 'changeStatus/' + actId + '/' + statusNum, '', ajaxChange);
-                $(status).removeClass('btn-danger');
-                $(status).addClass('btn-warning');
-                $(status).html('未开始');
-                return;
-            }
-
-        }
     </script>
 @endsection

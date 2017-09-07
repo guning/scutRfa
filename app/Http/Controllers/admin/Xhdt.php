@@ -90,7 +90,7 @@ class Xhdt extends Controller
     {
         $res = $this->getModelView($page);
         $res['model']->updateData($request->all());
-        return $this->modifyView($page, $request);
+        return $this->qList($page);
     }
 
 }

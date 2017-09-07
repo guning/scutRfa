@@ -24,27 +24,56 @@ class Florilegium extends Model {
     }
 
     public function getList() {
-        $tableDatas = $this->select('id', 'title', 'abstract','imgPath')->get();
+        $tableDatas = $this->select('id', 'title')->get();
         $data = array();
         foreach ($tableDatas as $tableData) {
             $tmp['id'] = $tableData['id'];
             $tmp['title'] = $tableData['title'];
-            $tmp['abstract'] = $tableData['abstract'];
-            $tmp['imgPath'] = $tableData['imgPath'];
             $data[] = $tmp;
         }
         return $data;
     }
 
     public function getModify($id){
-        $rawData = $this->select('id', 'title', 'imgPath', 'abstract')->where('id', '=', $id)->first();
+        $rawData = $this->select('id', 'title', 'imgpath', 'abstract')->where('id', '=', $id)->first();
         $data = array(
             'id' => $rawData->id,
             'title' => $rawData->title,
             'abstract' => $rawData->abstract,
-            'imgPath' => $rawData->imgPath
+            'imgpath' => $rawData->imgpath
         );
         return $data;
+    }
+
+    public function getNullData(){
+        return array(
+            'id' => '',
+            'title' => '',
+            'abstract' => '',
+            'imgpath' => '',
+        );
+    }
+
+    public function updateData($rawData){
+        $data = array(
+            'title' => $rawData['title'],
+            'abstract' => $rawData['abstract'],
+            'imgpath' => $rawData['imgpath']
+        );
+        if (!empty($rawData['id'])) {
+            $id = $rawData['id'];
+            return $this->where('id', '=', $id)->update($data);
+        } else {
+            if(!empty($data)) {
+                return $this->insert($data);
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    public function deleteData($id) {
+        return $this->where('id', '=', $id)->delete();
     }
 }
 

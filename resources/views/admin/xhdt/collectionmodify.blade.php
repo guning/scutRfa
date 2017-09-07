@@ -17,7 +17,7 @@
                     <tr>
                         <th>作品简介</th>
                         <th>
-                            <textarea name="" id="" cols="30" rows="10">{{$result['abstract']}}</textarea>
+                            <textarea name="abstract" id="" cols="30" rows="10">{{$result['abstract']}}</textarea>
                         </th>
                     </tr>
                     <tr>
@@ -26,13 +26,13 @@
                             <div>
                                 <button type="button" class="btn btn-default" onclick="$(this).next().click();">上传图片</button>
                                 <input type="file" accept="image/*" onchange="uploadfile(this)" style="display: none"/>
-                                <input style="display: none" name="poster" value="{{$result['imgPath']}}"/>
+                                <input style="display: none" name="imgpath" value="{{$result['imgpath']}}"/>
                             </div>
                         </th>
                     </tr>
                 </tbody>
             </table>
-            <button type="button" class="btn btn-primary btn-submit">提交</button>
+            <input type="submit" class="btn btn-primary btn-submit" value="提交"/>
         </form>
     </div>
     <script type="text/javascript">

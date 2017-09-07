@@ -13,18 +13,6 @@ class Activity extends Model {
     protected $table = 'activity';
     public $timestamps = false;
 
-    public function getList() {
-        $tableDatas = $this->select('id', 'title', 'status')->get();
-        $data = array();
-        foreach ($tableDatas as $tableData) {
-            $tmp['id'] = $tableData['id'];
-            $tmp['title'] = $tableData['title'];
-            $tmp['status'] = $tableData['status'];
-            $data[] = $tmp;
-        }
-        return $data;
-    }
-
     public function getApiData(){
         $rawData = $this->select('id', 'title', 'abstract', 'schedule', 'way', 'poster')->where('status', '=', 1)->get();
         $data = array();
@@ -40,6 +28,19 @@ class Activity extends Model {
         }
         return $data;
     }
+
+    public function getList() {
+        $tableDatas = $this->select('id', 'title', 'status')->get();
+        $data = array();
+        foreach ($tableDatas as $tableData) {
+            $tmp['id'] = $tableData['id'];
+            $tmp['title'] = $tableData['title'];
+            $tmp['status'] = $tableData['status'];
+            $data[] = $tmp;
+        }
+        return $data;
+    }
+
 
     public function getModify($id){
         $rawData = $this->select('id', 'title', 'abstract', 'schedule', 'way', 'poster')->where('id', '=', $id)->first();
@@ -115,7 +116,7 @@ class Activity extends Model {
             'way' => json_encode($way),
             'poster' => $rawData['poster']
         );
-        if (isset($rawData['id'])) {
+        if (!empty($rawData['id'])) {
             $id = $rawData['id'];
             return $this->where('id', '=', $id)->update($data);
         } else {

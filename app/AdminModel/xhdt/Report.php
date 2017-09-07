@@ -8,11 +8,13 @@
 namespace App\AdminModel\xhdt;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Storage;
 
 class Report extends Model {
     protected $table = 'report';
-
+    protected $guarded = ['id'];
     public function getApiData($pageIndex, $pageSize){
         Request::offsetSet('page', $pageIndex);
         $rawData = $this->select('id', 'title', 'abstract', 'updated_at as updateTime', 'imgpath as picUrl')->paginate($pageSize)->toJson();
@@ -37,14 +39,18 @@ class Report extends Model {
     }
 
     public function getModify($id){
-        $rawData = $this->select('id', 'title', 'abstract', 'schedule', 'way', 'poster')->where('id', '=', $id)->first();
+        $rawData = $this->select('id', 'title', 'abstract', 'imgpath')->where('id', '=', $id)->first();
+        $fileName = $rawData->id . ".txt";
+        $file = '';
+        if (Storage::disk('uploadHtml')->exists($fileName)) {
+            $file = Storage::disk('uploadHtml')->get($fileName);
+        }
         $data = array(
             'id' => $rawData->id,
             'title' => $rawData->title,
             'abstract' => $rawData->abstract,
-            'schedule' => json_decode($rawData->schedule, true),
-            'way' => json_decode($rawData->way, true),
-            'poster' => $rawData->poster
+            'imgpath' => $rawData->imgpath,
+            'content' => $file
         );
         return $data;
     }
@@ -54,68 +60,25 @@ class Report extends Model {
             'id' => '',
             'title' => '',
             'abstract' => '',
-            'schedule' => array(
-                array(
-                    'stage' => '',
-                    'beginTime' => '',
-                    'endTime' => '',
-                    'place' => ''
-                ),
-            ),
-            'way' => array(
-                array(
-                    'wayname' => '',
-                    'waycontent' => ''
-                ),
-            ),
-            'poster' => ''
+            'imgpath' => '',
+            'content' => ''
         );
     }
-    private function scheduleFilter($stages, $beginTimes, $endTimes, $places){
-        $schedule = array();
-        foreach ($stages as $key => $stage) {
-            if (trim($stage) == '' && trim($beginTimes[$key]) == '' && trim($endTimes[$key]) == '' && trim($places[$key]) == '') {
-                continue;
-            }
-            $schedule[] = array(
-                'stage' => $stage,
-                'beginTime' => $beginTimes[$key],
-                'endTime' => $endTimes[$key],
-                'place' => $places[$key]
-            );
-        }
-        return $schedule;
-    }
 
-    private function wayFilter($waynames, $waycontents) {
-        $way = array();
-        foreach ($waynames as $key => $wayname) {
-            if (trim($wayname) == '' && trim($waycontents[$key])) {
-                continue;
-            }
-            $way[] = array(
-                'wayname' => $wayname,
-                'waycontent' => $waycontents[$key]
-            );
-        }
-        return $way;
-    }
     public function updateData($rawData){
-        $schedule = $this->scheduleFilter($rawData['stage'], $rawData['beginTime'], $rawData['endTime'], $rawData['place']);
-        $way = $this->wayFilter($rawData['wayname'], $rawData['waycontent']);
         $data = array(
             'title' => $rawData['title'],
             'abstract' => $rawData['abstract'],
-            'schedule' => json_encode($schedule),
-            'way' => json_encode($way),
-            'poster' => $rawData['poster']
+            'imgpath' => $rawData['imgpath']
         );
-        if (isset($rawData['id'])) {
-            $id = $rawData['id'];
-            return $this->where('id', '=', $id)->update($data);
+        if (!empty($rawData['id'])) {
+            $fileName = $rawData['id'] . ".txt";
+            Storage::disk('uploadHtml')->put($fileName, $rawData['content']);
+            return $this->where('id', '=', $rawData['id'])->update($data);
         } else {
             if(!empty($data)) {
-                return $this->insert($data);
+                $res = $this->create($data);
+                Storage::disk('uploadHtml')->put($res->id . ".txt", $rawData['content']);
             } else {
                 return 0;
             }

@@ -96,7 +96,7 @@
     </form>
     <script type="text/javascript">
         function addway(btn){
-            var nexthtml = '<tr><th><input type="text" name="title[]" value=""/></th><th><input type="text" name="content[]" value=""/></th><th><button type="button" class="btn btn-default" onclick="rmEle(this)">删除</button></th></tr>';
+            var nexthtml = '<tr><th><input type="text" name="wayname[]" value=""/></th><th><input type="text" name="waycontent[]" value=""/></th><th><button type="button" class="btn btn-default" onclick="rmEle(this)">删除</button></th></tr>';
             $("#addway").append(nexthtml);
         }
         function addschedule(btn){

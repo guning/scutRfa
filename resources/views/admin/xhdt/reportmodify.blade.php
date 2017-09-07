@@ -7,16 +7,19 @@
 @include('UEditor::head')
 
     <div>
-        <form action="">
+        <form action="up" method="post">
             <table class="table">
                 <tbody>
                 <tr>
                     <th>报道标题</th>
-                    <th><input type="text"/></th>
+                    <th>
+                        <input type="text" name="title" value="{{$result['title']}}"/>
+                        <input name="id" style="display: none" value="{{$result['id']}}"/>
+                    </th>
                 </tr>
                 <tr>
                     <th>报道摘要</th>
-                    <th><textarea name="" id="" rows="5"></textarea></th>
+                    <th><textarea name="abstract" rows="5">{{$result['abstract']}}</textarea></th>
                 </tr>
                 <tr>
                     <th>报道图片</th>
@@ -24,24 +27,20 @@
                         <div>
                             <button type="button" class="btn btn-default" onclick="$(this).next().click();">上传图片</button>
                             <input type="file" accept="image/*" onchange="uploadfile(this)" style="display: none"/>
-                            <input style="display: none" name="xxxUrl" value=""/>
+                            <input style="display: none" name="imgpath" value="{{$result['imgpath']}}"/>
                         </div>
                     </th>
                 </tr>
                 <tr>
-                    <th>报道内容</th>
+                    <th>报道内容(Attention!本期只支持文字)</th>
                     <th></th>
-                </tr>
-                <tr>
-
                 </tr>
                 </tbody>
             </table>
-            <script id="containers" type="text/plain" style="height:500px;"></script>
+            <script id="containers" name="content" type="text/plain" style="height:500px;">{{$result['content']}}</script>
             <br/><br/><br/><br/>
             <div>
-                <button type="button" class="btn btn-primary btn-submit">提交</button>
-                <button type="button" class="btn btn-primary btn-review">预览</button>
+                <input type="submit" class="btn btn-primary btn-submit" value="提交"/>
             </div>
         </form>
     </div>
@@ -51,5 +50,6 @@
         //实例化编辑器
         //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
         var ue = UE.getEditor('containers');
+
     </script>
 @endsection
