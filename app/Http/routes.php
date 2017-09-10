@@ -100,12 +100,20 @@ Route::group(['prefix' => 'api', 'namespace' => 'customer'], function () {
     });
     /**
      * 首页请求路由
-     * 请求示例：webroot/api/caro
+     * 请求示例：webroot/api/home/caro
      */
-    Route::group(['prefix' => 'home'], function(){
+    Route::group(['prefix' => 'home'], function() {
         Route::get('caro', 'Home@caro');
         Route::get('dynamic', 'Home@dynamic');
         //Route::get('tecshare', 'home@tecShare');//未建表，未完成模块，暂留
+    });
+    /**
+     * 意见反馈请求路由
+     * 请求示例：webroot/api/advise/list
+     */
+    Route::group(['prefix' => 'advise'], function() {
+        Route::get('list', 'Reply@getReply');
+        Route::post('send', 'Reply@postReply');
     });
 
 });
@@ -144,9 +152,6 @@ Route::group(['prefix' => 'admin', 'namespace' => 'admin'], function () {
     });
 
     Route::group(['prefix' => 'yjfk'], function(){
-        Route::get('reply', function(){
-            abort(404);
-        });
         Route::get('list', 'Yjfk@qList');
         Route::post('reply', 'Yjfk@reply');
     });

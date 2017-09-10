@@ -8,36 +8,30 @@
 namespace App\Http\Controllers\admin;
 
 
+use App\AdminModel\yjfk\FeedbackResponse;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class Yjfk extends Controller {
     public function qList() {
-        $data = array(
-            array(
-                'id' => '1',
-                'user' => '',
-                'question' => 'this is my question',
-                'time' => '2017-09-08 22:22:22',
-                'status' => 0
-            ),
-            array(
-                'id' => '2',
-                'user' => '',
-                'question' => 'this is my question',
-                'time' => '2017-09-08 22:22:22',
-                'status' => 1
-            ),
-        );
+        $model = new FeedbackResponse();
+        $data = $model->getList();
         return view('admin/yjfk/list', ['results' => $data]);
     }
 
     public function reply(Request $request) {
-        $flag = $request->input('reply');
-        if ($flag == 1){
-            $data['state'] = false;
-        }else{
+        $reply = $request->input('reply');
+        if (empty($reply)) {
+            return array(
+                'state' => false,
+            );
+        }
+        $id = $request->input('id');
+        $model = new FeedbackResponse();
+        if ($model->saveReply($id, $reply)){
             $data['state'] = true;
+        }else{
+            $data['state'] = false;
         }
         return $data;
     }
