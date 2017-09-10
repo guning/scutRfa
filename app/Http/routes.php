@@ -33,6 +33,9 @@ Route::group(['prefix' => 'api', 'namespace' => 'customer'], function () {
         Route::get('collect', 'Activity@collection');
         Route::get('report', 'Activity@report');
     });
+    Route::group(['prefix' => 'article'], function(){
+        Route::get('details', 'Article@getDetails');
+    });
 
     /*Route::group(['prefix' => 'user'], function () {
         Route::get('getUserInfo', [
@@ -62,7 +65,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'customer'], function () {
 
     Route::get('response/fail', 'ResponseRedirect@fail');*/
 
-    Route::group(['prefix' => 'article'], function () {
+    /*Route::group(['prefix' => 'article'], function () {
         Route::post('uploadHtml', [
             'middleware' => ['Admin', 'uploadHtml'],
             'uses' => 'Article@uploadHtml'
@@ -86,7 +89,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'customer'], function () {
             'middleware' => 'Auth',
             'uses' => 'Article@thumbUpComment'
         ]);
-    });
+    });*/
     /**
      * 关于无协部分的请求路由
      * 请求示例：webroot/api/about
