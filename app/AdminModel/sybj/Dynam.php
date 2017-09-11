@@ -44,7 +44,7 @@ class Dynam extends Model
         foreach($requestdata as $key => $value){
             foreach($value as $k => $v){
                 if ($key == 'acturl') {
-                    if (is_int($v)) {//如果是id转成url
+                    if (0 === strcmp($v, (int) $v)) {//如果是id转成url
                         $v = '/api/article/details?id=' . $v;
                     }
                 }
