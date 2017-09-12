@@ -40,7 +40,7 @@ class Feedback extends Model {
             'created_at' => time()
         );
         $res = $this->insert($insertData);
-        if ($res >= 1) {
+        if ($res) {
             return true;
         } else {
             return false;

@@ -50,7 +50,7 @@ class FeedbackResponse extends Model {
             );
             $res = $this->where('question_id', '=', $id)->update($updateData);
         }
-        if ($res >= 1) {
+        if ($res) {
             return true;
         } else {
             return false;
